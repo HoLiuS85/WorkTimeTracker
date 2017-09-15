@@ -1,0 +1,34 @@
+﻿<Window x:Class="WorkTimeTracker.wndNotification"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorkTimeTracker"
+        mc:Ignorable="d"
+        Title="wndNotification" MinWidth="250" WindowStyle="None" ShowInTaskbar="False" Topmost="True" Loaded="Window_Loaded" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <!-- Header Section -->
+        <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1"/>
+        <Image HorizontalAlignment="Left" Stretch="Uniform"  Source="/res/logo_hourglass.png" Height="40" Width="40"  Margin="5,5,0,5" Grid.Row="0" VerticalAlignment="Top" />
+        <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Margin="50,5,0,0" TextWrapping="Wrap" Text="Worktime statistics" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBlock HorizontalAlignment="Left" Margin="50,25,20,0" TextWrapping="Wrap" Text="Let's keep track of your day" VerticalAlignment="Top"  Grid.Row="0"/>
+        <!-- Main Section -->
+        <ProgressBar Height="20" Margin="20,0,20,10" Grid.Row="1"  VerticalAlignment="Bottom" Width="auto" Padding="0" />
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,35" TextWrapping="Wrap" Text="00:00"  Grid.Row="1"/>
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,35" TextWrapping="Wrap" Text="00:00"  Grid.Row="1"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,10,20,80" TextWrapping="Wrap" Text="Elapsed Time:"  Grid.Row="1"/>
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,80" TextWrapping="Wrap" Text="00:00"  Grid.Row="1"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,20,60" TextWrapping="Wrap" Text="Remaining Time"  Grid.Row="1"/>
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,60" TextWrapping="Wrap" Text="00:00"  Grid.Row="1"/>
+        <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="0,0,0,1"/>
+        <!-- Footer Row-->
+        <Rectangle Grid.Row="2" Fill="#FFF1F5FB" />
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,30" TextWrapping="Wrap" Text="Start a new Workday"  Grid.Row="2" Foreground="#FF0066CC"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10" TextWrapping="Wrap" Text="Modify Workday"  Grid.Row="2" Foreground="#FF0066CC"/>
+    </Grid>
+</Window>
