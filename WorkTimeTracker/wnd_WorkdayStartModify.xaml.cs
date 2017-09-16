@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -16,11 +15,11 @@ using System.Windows.Shapes;
 namespace WorkTimeTracker
 {
     /// <summary>
-    /// Interaction logic for wnd_WorkdayEnd.xaml
+    /// Interaction logic for wnd_WorkdayStart.xaml
     /// </summary>
-    public partial class wnd_WorkdayEnd : Window
+    public partial class wnd_WorkdayStart : Window
     {
-        public wnd_WorkdayEnd()
+        public wnd_WorkdayStart()
         {
             InitializeComponent();
         }
@@ -28,8 +27,19 @@ namespace WorkTimeTracker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Aero.enable(5, this);
-            pickerEndtime.Value = DateTime.Now;
 
+            if (!WorkdayHandler.getIsStarted())
+            {
+                labelHeaderTitle.Text = "Start new Workday";
+                pickerStartTime.Value = DateTime.Now;
+            }
+            else
+            {
+                labelHeaderTitle.Text = "Modify current Workday";
+                pickerStartTime.Value = UserData.getWorkTimeStart();
+            }
+
+            pickerWorkDuration.Value = UserData.getWorkDuration();
         }
 
         #region UI Events
@@ -49,8 +59,10 @@ namespace WorkTimeTracker
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            WorkdayHandler.WorkdayEnd(pickerEndtime.Value.Value);
-            base.Close();
+            UserData.setWorkTimeStart(pickerStartTime.Value.Value);
+
+            WorkdayHandler.WorkdayStart(pickerWorkDuration.Value.Value, pickerStartTime.Value.Value);
+            Close();
         }
         #endregion
     }

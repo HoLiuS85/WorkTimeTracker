@@ -11,7 +11,6 @@ namespace WorkTimeTracker
 {
     static class UserData
     {
-
         private static Colour _cTrayIcon;
         private static Int32 _iInterval;
         private static Int32 _iWorkDuration;
@@ -188,16 +187,17 @@ namespace WorkTimeTracker
 
         public static void ExportOldConfig()
         {
-            setTrayIconColor(Config.cHead);
-            setInterval(Config.iCalcInterval);
-            setWorkTimeEnd(Config.dtWorkEndTime);
-            setWorkTimeStart(Config.dtWorkStartTime);
-            setWorkTimeElapsed(Config.tsWorkTimeElapsed);
-            setWorkTimeRemaining(Config.tsWorkTimeRemaining);
-            setThresholds(Config.lThresholds);
-            setSubtitles(Config.lSubtitles);
-            setBreaks(Config.lBreaks);
-            setDays(Config.lDays);
+            //setTrayIconColor(Config.cHead);
+            //setInterval(Config.iCalcInterval);
+            //setWorkDuration(Config.iWorkDuration);
+            //setWorkTimeEnd(Config.dtWorkEndTime);
+            //setWorkTimeStart(Config.dtWorkStartTime);
+            //setWorkTimeElapsed(Config.tsWorkTimeElapsed);
+            //setWorkTimeRemaining(Config.tsWorkTimeRemaining);
+            //setThresholds(Config.lThresholds);
+            //setSubtitles(Config.lSubtitles);
+            //setBreaks(Config.lBreaks);
+            //setDays(Config.lDays);
         }
     }
 }

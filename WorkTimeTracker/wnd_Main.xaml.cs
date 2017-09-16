@@ -21,17 +21,16 @@ namespace WorkTimeTracker
     {
         public wndMain()
         {
-
+            /*
             Config.Import();
-
             UserData.ExportOldConfig();
+            */
 
             // read user settings
             UserData.Import();
 
-
-            if (Config.lDays.LastOrDefault<Day>().dtEndTime == DateTime.MinValue)
-                WorkdayHandler.WorkdayStart(Config.iWorkDuration, Config.lBreaks, Config.lDays.LastOrDefault<Day>().dtStartTime);
+            if (UserData.getDays().LastOrDefault().dtEndTime == DateTime.MinValue)
+                WorkdayHandler.WorkdayStart(UserData.getWorkDuration(), UserData.getDays().LastOrDefault().dtStartTime);
 
             ui_NotifyIcon Icon = new ui_NotifyIcon();
             Icon.trayIcon.Click += OnTrayClick;
@@ -95,10 +94,10 @@ namespace WorkTimeTracker
             Window tempWindow = (Window)sender;
             Point windowPosition = new Point();
 
-            Rect ScreenSize = Helper.GetScreenSize();
+            Rect ScreenSize = Helper.getScreenSize();
             windowPosition.Y = (ScreenSize.Height - tempWindow.ActualHeight) - tempWindow.ActualHeight-200;
             
-            Point mousePositon = Helper.GetMousePosition(tempWindow);
+            Point mousePositon = Helper.getMousePosition(tempWindow);
             windowPosition.X = mousePositon.X - (tempWindow.ActualWidth / 2);
 
             tempWindow.Top = windowPosition.Y;

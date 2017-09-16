@@ -82,8 +82,8 @@
     <Compile Include="wnd_WorkdayEnd.xaml.cs">
       <DependentUpon>wnd_WorkdayEnd.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wnd_WorkdayStart.xaml.cs">
-      <DependentUpon>wnd_WorkdayStart.xaml</DependentUpon>
+    <Compile Include="wnd_WorkdayStartModify.xaml.cs">
+      <DependentUpon>wnd_WorkdayStartModify.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkdayHandler.cs" />
   </ItemGroup>
@@ -133,7 +133,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="wnd_WorkdayStart.xaml">
+    <Page Include="wnd_WorkdayStartModify.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

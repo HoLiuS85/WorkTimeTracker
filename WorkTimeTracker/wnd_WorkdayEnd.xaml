@@ -1,11 +1,12 @@
-﻿<Window
+﻿<Window x:Class="WorkTimeTracker.wnd_WorkdayEnd"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WorkTimeTracker" xmlns:xctk1="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WorkTimeTracker.wnd_WorkdayEnd"
+        xmlns:local="clr-namespace:WorkTimeTracker" 
+        xmlns:xctk1="http://schemas.xceed.com/wpf/xaml/toolkit" 
         mc:Ignorable="d"
-        Title="wnd_WorkdayEnd" MinWidth="180" Loaded="Window_Loaded" WindowStyle="None" ShowInTaskbar="False" Topmost="True" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated">
+        Title="wnd_WorkdayEnd" MinWidth="180" Loaded="Window_Loaded" WindowStyle="None" ShowInTaskbar="False" Topmost="True" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated" ResizeMode="NoResize">
     <Grid>
         <TextBlock Name="labelHeaderTitle" HorizontalAlignment="Left" Margin="5,5,0,0" TextWrapping="Wrap" Text="End current Workday" VerticalAlignment="Top" FontWeight="Bold"/>
         <TextBlock Name="labelEndText" HorizontalAlignment="Left" Margin="10,30,0,0" TextWrapping="Wrap" Text="End time:" VerticalAlignment="Top" />

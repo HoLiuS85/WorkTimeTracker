@@ -3,22 +3,22 @@
   <Profiles />
   <Settings>
     <Setting Name="listThresholds" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACGAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLlRocmVzaG9sZCwgV29ya1RpbWVUcmFja2VyLCBWZXJzaW9uPTEuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dAwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24EAAAbV29ya1RpbWVUcmFja2VyLlRocmVzaG9sZFtdAgAAAAgICQMAAAADAAAAAwAAAAcDAAAAAAEAAAAEAAAABBlXb3JrVGltZVRyYWNrZXIuVGhyZXNob2xkAgAAAAkEAAAACQUAAAAJBgAAAAoFBAAAABlXb3JrVGltZVRyYWNrZXIuVGhyZXNob2xkAwAAAAdzdHJOYW1lBmNDb2xvcgZpVmFsdWUBBAAWV29ya1RpbWVUcmFja2VyLkNvbG91cgIAAAAIAgAAAAYHAAAAA2JhZAX4////FldvcmtUaW1lVHJhY2tlci5Db2xvdXIEAAAAAUEBUgFHAUIAAAAAAgICAgIAAAD//wAAAAAAAAEFAAAABAAAAAYJAAAABGdvb2QB9v////j/////QcEcUAAAAAEGAAAABAAAAAYLAAAABm1lZGl1bQH0////+P//////gEAyAAAACw==</Value>
     </Setting>
     <Setting Name="listBreaks" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACCAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLkJyZWFrLCBXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsXV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgQAABdXb3JrVGltZVRyYWNrZXIuQnJlYWtbXQIAAAAICAkDAAAAAwAAAAMAAAAHAwAAAAABAAAABAAAAAQVV29ya1RpbWVUcmFja2VyLkJyZWFrAgAAAAkEAAAACQUAAAAJBgAAAAoFBAAAABVXb3JrVGltZVRyYWNrZXIuQnJlYWsEAAAAB3N0ck5hbWUJaXNFbmFibGVkCnRzRHVyYXRpb24LZHRTdGFydFRpbWUBAAAAAQwNAgAAAAYHAAAACWJyZWFrZmFzdAEAGnEYAgAAAACQdCzQA9QIAQUAAAAEAAAABggAAAAFbHVuY2gBADTiMAQAAAAAyMFR6QPUCAEGAAAABAAAAAYJAAAABmRpbm5lcgEAGnEYAgAAAAA4XJwbBNQICw==</Value>
     </Setting>
     <Setting Name="listSubtitles" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACFAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLlN1YnRpdGxlLCBXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsXV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgQAABpXb3JrVGltZVRyYWNrZXIuU3VidGl0bGVbXQIAAAAICAkDAAAACQAAAAkAAAAHAwAAAAABAAAAEAAAAAQYV29ya1RpbWVUcmFja2VyLlN1YnRpdGxlAgAAAAkEAAAACQUAAAAJBgAAAAkHAAAACQgAAAAJCQAAAAkKAAAACQsAAAAJDAAAAA0HBQQAAAAYV29ya1RpbWVUcmFja2VyLlN1YnRpdGxlAwAAAAtpUmFuZ2VTdGFydAlpUmFuZ2VFbmQLc3RyU3VidGl0bGUAAAEICAIAAAAAAAAACgAAAAYNAAAAE0dvb2QgbW9ybmluZywgY3VudCEBBQAAAAQAAAAAAAAACgAAAAYOAAAAEFN0aWxsIGRydW5rLCBlaD8BBgAAAAQAAAAKAAAAMgAAAAYPAAAAEVlvdSdyZSBkb29tZWQuLi4uAQcAAAAEAAAACgAAADIAAAAGEAAAABJFdGVybml0eSBhd2FpdHMuLi4BCAAAAAQAAAAyAAAAWgAAAAYRAAAAGUJlZXIgaXMgZ2V0dGluZyBjbG9zZXIuLi4BCQAAAAQAAAAyAAAAWgAAAAYSAAAAFkp1dXV1c3QgYSBiaXQgbW9yZSBub3cBCgAAAAQAAABaAAAAZAAAAAYTAAAACUVORFBTVVJUIQELAAAABAAAAGQAAABkAAAABhQAAAARRnVjayBvZmYgYWxyZWFkeSEBDAAAAAQAAABkAAAAZAAAAAYVAAAAD0dldCBsb3N0LCBjdW50IQs=</Value>
     </Setting>
     <Setting Name="listDays" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACAAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLkRheSwgV29ya1RpbWVUcmFja2VyLCBWZXJzaW9uPTEuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dAwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24EAAAVV29ya1RpbWVUcmFja2VyLkRheVtdAgAAAAgICQMAAAABAAAAAQAAAAcDAAAAAAEAAAAEAAAABBNXb3JrVGltZVRyYWNrZXIuRGF5AgAAAAkEAAAADQMFBAAAABNXb3JrVGltZVRyYWNrZXIuRGF5AwAAAAtkdFN0YXJ0VGltZQlkdEVuZFRpbWUDaUlEAAAADQ0IAgAAAADWJASO79QIACKgStrv1AgBAAAACw==</Value>
     </Setting>
     <Setting Name="intWorkDuration" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">456</Value>
     </Setting>
     <Setting Name="intInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="dtWorkStartTime" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />
@@ -33,13 +33,7 @@
       <Value Profile="(Default)">00:00:00</Value>
     </Setting>
     <Setting Name="colorTrayIcon" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="biHead" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="biClock" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBQEAAAAWV29ya1RpbWVUcmFja2VyLkNvbG91cgQAAAABQQFSAUcBQgAAAAACAgICAgAAAP////8L</Value>
     </Setting>
   </Settings>
 </SettingsFile>

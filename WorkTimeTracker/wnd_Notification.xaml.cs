@@ -32,28 +32,31 @@ namespace WorkTimeTracker
         {
             Aero.enable(5, this);
 
-            WorkdayPercent = WorkdayHandler.WorkdayPercent();
-            isWorkdayStarted = WorkdayHandler.isWorkdayStarted();
+            WorkdayPercent = WorkdayHandler.getPercent();
+            isWorkdayStarted = WorkdayHandler.getIsStarted();
 
-            labelHeaderSubtitle.Text = Helper.GetSubtitle(WorkdayPercent);
-            labelRemainingTime.Text = string.Concat((Config.tsWorkTimeRemaining < TimeSpan.Zero ? "-" : ""), Config.tsWorkTimeRemaining.ToString("hh\\:mm"));
-            labelElapseTime.Text = Config.tsWorkTimeElapsed.ToString("hh\\:mm");
-            labelEndTime.Text = Config.dtWorkEndTime.ToShortTimeString();
-            labelStartTime.Text = Config.dtWorkStartTime.ToShortTimeString();
+            labelHeaderSubtitle.Text = Helper.getSubtitle(WorkdayPercent);
+            labelRemainingTime.Text = UserData.getWorkTimeRemaining().ToString("hh\\:mm");
+            labelRemainingText.Text = UserData.getWorkTimeRemaining() < TimeSpan.Zero ? "Overtime:" : "Remaining Time";
+            labelElapsedTime.Text = UserData.getWorkTimeElapsed().ToString("hh\\:mm");
+            labelEndTime.Text = UserData.getWorkTimeEnd().ToShortTimeString();
+            labelStartTime.Text = UserData.getWorkTimeStart().ToShortTimeString();
             progressbarWorktime.Value = WorkdayPercent;
-            progressbarWorktime.Foreground = Helper.GetProgressColor(WorkdayPercent);
+            progressbarWorktime.Foreground = new SolidColorBrush(Helper.getProgressColor(WorkdayPercent));
 
             if (!isWorkdayStarted)
             {
-                labelWorkdayModify = null;
+                grid.Children.Remove(labelWorkdayModify);
                 labelWorkdayStartEnd.Text = "Start new Workday";
+                labelWorkdayStartEnd.Margin = new Thickness(0, 10, 0, 15);
             }
             else
             {
                 labelWorkdayStartEnd.Text = "End current Workday";
             }
         }
-        
+
+        #region UI Events
         private void Window_OnDeactivated(object sender, EventArgs e)
         {
             try
@@ -89,5 +92,6 @@ namespace WorkTimeTracker
 
             Close();
         }
+        #endregion
     }
 }
