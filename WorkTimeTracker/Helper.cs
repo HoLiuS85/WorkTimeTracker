@@ -42,11 +42,16 @@ namespace WorkTimeTracker
         }
 
         // Get Size/Resolution of the current screen
-        public static Rect getScreenSize()
+        public static Rect getScreenSize(System.Windows.Point mouseposition)
         {
-            System.Drawing.Rectangle ScreenSize = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-            
-            return new Rect(ScreenSize.Left, ScreenSize.Top, ScreenSize.Width, ScreenSize.Height);
+            foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+            {
+                if(mouseposition.X > screen.Bounds.Left && mouseposition.X < screen.Bounds.Right)
+                    return new Rect(screen.WorkingArea.X, screen.WorkingArea.Y, screen.WorkingArea.Width, screen.WorkingArea.Height);
+            }
+
+            Rectangle ScreenSize = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+            return new Rect(ScreenSize.X, ScreenSize.Y, ScreenSize.Width, ScreenSize.Height);
         }
 
         // Get the current position of the mouse
@@ -62,7 +67,7 @@ namespace WorkTimeTracker
         {
             Bitmap bmpResult = new Bitmap(128, 128);
 
-            using (Bitmap bmpHead = changeBitmapColor(Properties.Resources.icon_head_128, UserData.getTrayIconColor()))
+            using (Bitmap bmpHead = changeBitmapColor(Properties.Resources.icon_head_128, cHead))
             {
                 using (Bitmap bmpClock = changeBitmapColor(Properties.Resources.icon_clock_128, cClock))
                 {

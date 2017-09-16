@@ -30,7 +30,7 @@ namespace WorkTimeTracker
             UserData.Import();
 
             if (UserData.getDays().LastOrDefault().dtEndTime == DateTime.MinValue)
-                WorkdayHandler.WorkdayStart(UserData.getWorkDuration(), UserData.getDays().LastOrDefault().dtStartTime);
+                WorkdayHandler.WorkdayStart(UserData.getWorkDuration(), UserData.getWorkTimeStart());
 
             ui_NotifyIcon Icon = new ui_NotifyIcon();
             Icon.trayIcon.Click += OnTrayClick;
@@ -39,20 +39,15 @@ namespace WorkTimeTracker
             Icon.trayIcon.ContextMenu.MenuItems["exit"].Click += OnExitClick;
         }
 
-
+        private void OnTrayClick(object sender, EventArgs e)
+        {
+            if ((e as System.Windows.Forms.MouseEventArgs).Button == System.Windows.Forms.MouseButtons.Left)
+                WindowOpener(new wndNotification());
+        }
 
         private void OnSettingsClick(object sender, EventArgs e)
         {
             //this.FrmOpener(new frmSettings());
-        }
-
-        private void OnTrayClick(object sender, EventArgs e)
-        {
-
-            if ((e as System.Windows.Forms.MouseEventArgs).Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                WindowOpener(new wndNotification());
-            }
         }
 
         private void OnHistoryClick(object sender, EventArgs e)
@@ -93,13 +88,18 @@ namespace WorkTimeTracker
         {
             Window tempWindow = (Window)sender;
             Point windowPosition = new Point();
-
-            Rect ScreenSize = Helper.getScreenSize();
-            windowPosition.Y = (ScreenSize.Height - tempWindow.ActualHeight) - tempWindow.ActualHeight-200;
-            
             Point mousePositon = Helper.getMousePosition(tempWindow);
+            Rect ScreenSize = Helper.getScreenSize(mousePositon);
+            
+            // Set Initial y-position on to of the start menu and x-position centered over the mouse
             windowPosition.X = mousePositon.X - (tempWindow.ActualWidth / 2);
+            windowPosition.Y = ScreenSize.Y + ScreenSize.Height - tempWindow.ActualHeight;
 
+            // Adjust X position to not overlap screen borders
+            if (windowPosition.X + tempWindow.ActualWidth > ScreenSize.Right)
+                windowPosition.X -= windowPosition.X + tempWindow.ActualWidth - ScreenSize.Right;
+            
+            // Write numbers to the window
             tempWindow.Top = windowPosition.Y;
             tempWindow.Left = windowPosition.X;
         }

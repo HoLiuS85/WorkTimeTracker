@@ -59,8 +59,6 @@ namespace WorkTimeTracker
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            UserData.setWorkTimeStart(pickerStartTime.Value.Value);
-
             WorkdayHandler.WorkdayStart(pickerWorkDuration.Value.Value, pickerStartTime.Value.Value);
             Close();
         }

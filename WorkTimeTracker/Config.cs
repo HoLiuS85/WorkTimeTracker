@@ -278,7 +278,7 @@ namespace WorkTimeTracker
             return Color.FromArgb(colour.A, colour.R, colour.G, colour.B);
         }
     }
-
+    
     [Flags]
     public enum OpenForm
     {
