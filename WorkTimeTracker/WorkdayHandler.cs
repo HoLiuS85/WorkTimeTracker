@@ -17,12 +17,12 @@ namespace WorkTimeTracker
 			DateTime now = DateTime.Now;
 			foreach (Break lBreak in lBreaks)
 			{
-				if ((!lBreak.isEnabled || !(DateTime.Now.TimeOfDay > lBreak.dtStartTime.TimeOfDay) || !(Config.dtStartTime.TimeOfDay < lBreak.dtStartTime.TimeOfDay) ? false : Config.dtEndTime.TimeOfDay > lBreak.dtStartTime.TimeOfDay))
+				if ((!lBreak.isEnabled || !(DateTime.Now.TimeOfDay > lBreak.dtStartTime.TimeOfDay) || !(Config.dtWorkStartTime.TimeOfDay < lBreak.dtStartTime.TimeOfDay) ? false : Config.dtWorkEndTime.TimeOfDay > lBreak.dtStartTime.TimeOfDay))
 				{
 					now = now.Subtract(lBreak.tsDuration);
 				}
 			}
-			return now - Config.dtStartTime;
+			return now - Config.dtWorkStartTime;
 		}
 
 		private static DateTime CalcDayEndTime()
@@ -42,10 +42,10 @@ namespace WorkTimeTracker
 		{
 			while (true)
 			{
-				Config.dtStartTime = DayStartTime;
-				Config.dtEndTime = CalcDayEndTime();
-				Config.tsElapsed = CalcDayElapsedTime();
-				Config.tsRemaining = Config.dtEndTime - DateTime.Now;
+				Config.dtWorkStartTime = DayStartTime;
+				Config.dtWorkEndTime = CalcDayEndTime();
+				Config.tsWorkTimeElapsed = CalcDayElapsedTime();
+				Config.tsWorkTimeRemaining = Config.dtWorkEndTime - DateTime.Now;
 				Thread.Sleep(Config.iCalcInterval);
 			}
 		}
@@ -74,10 +74,10 @@ namespace WorkTimeTracker
 		public static void WorkdayEnd(DateTime EndTime)
 		{
 			Config.lDays.LastOrDefault().dtEndTime = EndTime;
-			Config.dtStartTime = DateTime.MinValue;
-			Config.dtEndTime = DateTime.MinValue;
-			Config.tsRemaining = TimeSpan.Zero;
-			Config.tsElapsed = TimeSpan.Zero;
+			Config.dtWorkStartTime = DateTime.MinValue;
+			Config.dtWorkEndTime = DateTime.MinValue;
+			Config.tsWorkTimeRemaining = TimeSpan.Zero;
+			Config.tsWorkTimeElapsed = TimeSpan.Zero;
             tWorkTimeCalculation.Abort();
 			Config.Export();
 		}
@@ -87,8 +87,8 @@ namespace WorkTimeTracker
 			int num;
 			try
 			{
-				double totalMinutes = Config.tsElapsed.TotalMinutes;
-				TimeSpan timeSpan = Config.tsElapsed.Add(Config.tsRemaining);
+				double totalMinutes = Config.tsWorkTimeElapsed.TotalMinutes;
+				TimeSpan timeSpan = Config.tsWorkTimeElapsed.Add(Config.tsWorkTimeRemaining);
 				int num1 = Convert.ToInt32(totalMinutes / timeSpan.TotalMinutes * 100);
 				num = (num1 < 100 ? num1 : 100);
 			}

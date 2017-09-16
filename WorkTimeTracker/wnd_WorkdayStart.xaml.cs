@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -16,19 +15,13 @@ using System.Windows.Shapes;
 namespace WorkTimeTracker
 {
     /// <summary>
-    /// Interaction logic for wndNotification.xaml
+    /// Interaction logic for wnd_WorkdayStart.xaml
     /// </summary>
-    public partial class wndNotification : Window
+    public partial class wnd_WorkdayStart : Window
     {
-        public wndNotification()
+        public wnd_WorkdayStart()
         {
             InitializeComponent();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
-            Aero.enable(5, 5, 5, 5, new WindowInteropHelper(this).Handle);
         }
     }
 }

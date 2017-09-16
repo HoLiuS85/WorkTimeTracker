@@ -33,6 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -50,6 +56,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.1\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -61,12 +70,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helper.cs" />
     <Compile Include="ui_NotifyIcon.cs" />
-    <Compile Include="ui_MainWindow.xaml.cs">
-      <DependentUpon>ui_MainWindow.xaml</DependentUpon>
+    <Compile Include="UserData.cs" />
+    <Compile Include="wnd_Main.xaml.cs">
+      <DependentUpon>wnd_Main.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ui_NotificationWindow.xaml.cs">
-      <DependentUpon>ui_NotificationWindow.xaml</DependentUpon>
+    <Compile Include="wnd_Notification.xaml.cs">
+      <DependentUpon>wnd_Notification.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="wnd_WorkdayEnd.xaml.cs">
+      <DependentUpon>wnd_WorkdayEnd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="wnd_WorkdayStart.xaml.cs">
+      <DependentUpon>wnd_WorkdayStart.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkdayHandler.cs" />
   </ItemGroup>
@@ -89,6 +106,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="key.snk" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -102,17 +121,26 @@
     <Resource Include="res\icon_head_128.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ui_MainWindow.xaml">
+    <Page Include="wnd_Main.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ui_NotificationWindow.xaml">
+    <Page Include="wnd_Notification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="wnd_WorkdayEnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="wnd_WorkdayStart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\logo_hourglass.png" />
+    <Content Include="res\Xceed.Wpf.Toolkit.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace WorkTimeTracker
 {
@@ -12,18 +13,18 @@ namespace WorkTimeTracker
 		[DllImport("dwmapi.dll", CharSet=CharSet.None, ExactSpelling=false, PreserveSig=false)]
 		public static extern bool DwmIsCompositionEnabled();
 
-		public static void enable(int top, int left, int bottom, int right, IntPtr handle)
+		public static void enable(int margins, Window window)
 		{
-			if (Aero.DwmIsCompositionEnabled())
+            if (Aero.DwmIsCompositionEnabled())
 			{
 				MARGINS margin = new MARGINS()
 				{
-					Top =top,
-					Left = left,
-					Bottom =bottom,
-					Right = right
-				};
-				Aero.DwmExtendFrameIntoClientArea(handle, ref margin);
+					Top = margins,
+					Left = margins,
+					Bottom = margins,
+					Right = margins
+                };
+				Aero.DwmExtendFrameIntoClientArea(new WindowInteropHelper(window).Handle, ref margin);
 			}
 		}
 

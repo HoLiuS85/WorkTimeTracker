@@ -16,10 +16,10 @@ namespace WorkTimeTracker
 		public static List<Subtitle> lSubtitles;
 		public static List<Break> lBreaks;
 		public static List<Day> lDays;
-		public static DateTime dtStartTime;
-		public static DateTime dtEndTime;
-		public static TimeSpan tsRemaining;
-		public static TimeSpan tsElapsed;
+		public static DateTime dtWorkStartTime;
+		public static DateTime dtWorkEndTime;
+		public static TimeSpan tsWorkTimeRemaining;
+		public static TimeSpan tsWorkTimeElapsed;
 		public static BitmapImage imgHead;
 		public static BitmapImage imgClock;
 		public static Color cHead;
@@ -174,14 +174,13 @@ namespace WorkTimeTracker
         }
     }
 
+
+    [Serializable]
     public class Break
     {
         public string strName;
-
         public bool isEnabled;
-
         public TimeSpan tsDuration;
-
         public DateTime dtStartTime;
 
         public Break(bool enabled, DateTime starttime, TimeSpan duration, string name)
@@ -193,12 +192,11 @@ namespace WorkTimeTracker
         }
     }
 
+    [Serializable]
     public class Day
     {
         public DateTime dtStartTime;
-
         public DateTime dtEndTime;
-
         public int iID;
 
         public Day()
@@ -213,12 +211,11 @@ namespace WorkTimeTracker
         }
     }
 
+    [Serializable]
     public class Subtitle
     {
         public int iRangeStart;
-
         public int iRangeEnd;
-
         public string strSubtitle;
 
         public Subtitle(int RangeStart, int RangeEnd, string Subtitle)
@@ -229,12 +226,11 @@ namespace WorkTimeTracker
         }
     }
 
+    [Serializable]
     public class Threshold
     {
         public string strName;
-
-        public Color cColor;
-
+        public Colour cColor;
         public int iValue;
 
         public Threshold(Color color, int value, string name)
@@ -242,6 +238,38 @@ namespace WorkTimeTracker
             this.cColor = color;
             this.iValue = value;
             this.strName = name;
+        }
+    }
+
+    [Serializable]
+    public struct Colour
+    {
+        public byte A;
+        public byte R;
+        public byte G;
+        public byte B;
+
+        public Colour(byte a, byte r, byte g, byte b)
+        {
+            A = a;
+            R = r;
+            G = g;
+            B = b;
+        }
+
+        public Colour(Color color)
+            : this(color.A, color.R, color.G, color.B)
+        {
+        }
+
+        public static implicit operator Colour(Color color)
+        {
+            return new Colour(color);
+        }
+
+        public static implicit operator Color(Colour colour)
+        {
+            return Color.FromArgb(colour.A, colour.R, colour.G, colour.B);
         }
     }
 

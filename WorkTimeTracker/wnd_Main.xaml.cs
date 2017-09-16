@@ -21,7 +21,17 @@ namespace WorkTimeTracker
     {
         public wndMain()
         {
+
             Config.Import();
+
+            UserData.ExportOldConfig();
+
+            // read user settings
+            UserData.Import();
+
+
+            if (Config.lDays.LastOrDefault<Day>().dtEndTime == DateTime.MinValue)
+                WorkdayHandler.WorkdayStart(Config.iWorkDuration, Config.lBreaks, Config.lDays.LastOrDefault<Day>().dtStartTime);
 
             ui_NotifyIcon Icon = new ui_NotifyIcon();
             Icon.trayIcon.Click += OnTrayClick;
@@ -62,6 +72,9 @@ namespace WorkTimeTracker
 
         private void WindowOpener(Window window)
         {
+            //Reset the Openform Flag
+            Config.openForm = OpenForm.None;
+
             window.SizeChanged += OnWindowSizeChanged;
             window.Closed += OnWindowClosed;
             window.Show();
@@ -70,18 +83,11 @@ namespace WorkTimeTracker
 
         private void OnWindowClosed(object sender, EventArgs e)
         {
-            string asd = e.GetType().ToString();
-            OpenForm openForm = Config.openForm;
-            if (openForm == OpenForm.StartModify)
-            {
-                Config.openForm = OpenForm.None;
-                //this.WindowOpener(new frmWorkdayStart());
-            }
-            else if (openForm == OpenForm.End)
-            {
-                Config.openForm = OpenForm.None;
-                //this.WindowOpener(new frmWorkdayEnd());
-            }
+            if (Config.openForm == OpenForm.StartModify)
+                WindowOpener(new wnd_WorkdayStart());
+
+            if (Config.openForm == OpenForm.End)
+                WindowOpener(new wnd_WorkdayEnd());
         }
 
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -89,14 +95,14 @@ namespace WorkTimeTracker
             Window tempWindow = (Window)sender;
             Point windowPosition = new Point();
 
-            Int32 screenXsize = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
-            windowPosition.Y = (screenXsize - tempWindow.ActualHeight) - tempWindow.ActualHeight;
+            Rect ScreenSize = Helper.GetScreenSize();
+            windowPosition.Y = (ScreenSize.Height - tempWindow.ActualHeight) - tempWindow.ActualHeight-200;
+            
+            Point mousePositon = Helper.GetMousePosition(tempWindow);
+            windowPosition.X = mousePositon.X - (tempWindow.ActualWidth / 2);
 
-            Int32 cursorXPos = System.Windows.Forms.Cursor.Position.X;
-            windowPosition.X = (cursorXPos - tempWindow.ActualWidth) - tempWindow.ActualWidth;
-
-            tempWindow.Top = 0;
-            tempWindow.Left = cursorXPos;
+            tempWindow.Top = windowPosition.Y;
+            tempWindow.Left = windowPosition.X;
         }
     }
 }
