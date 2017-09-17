@@ -83,6 +83,9 @@
     <Compile Include="wnd_Notification.xaml.cs">
       <DependentUpon>wnd_Notification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wnd_Settings.xaml.cs">
+      <DependentUpon>wnd_Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="wnd_WorkdayEnd.xaml.cs">
       <DependentUpon>wnd_WorkdayEnd.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="wnd_Notification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="wnd_Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

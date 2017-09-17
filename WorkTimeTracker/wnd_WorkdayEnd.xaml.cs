@@ -17,7 +17,6 @@ namespace WorkTimeTracker
         {
             Aero.enable(5, this);
             pickerEndtime.Value = DateTime.Now;
-
         }
 
         #region UI Events

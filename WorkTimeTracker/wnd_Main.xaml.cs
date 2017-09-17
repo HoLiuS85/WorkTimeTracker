@@ -37,7 +37,7 @@ namespace WorkTimeTracker
 
         private void OnSettingsClick(object sender, EventArgs e)
         {
-            //this.FrmOpener(new frmSettings());
+            WindowOpener(new wnd_Settings());
         }
 
         private void OnHistoryClick(object sender, EventArgs e)
