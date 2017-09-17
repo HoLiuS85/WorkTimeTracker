@@ -11,10 +11,10 @@ namespace WorkTimeTracker
     {
         public wndMain()
         {
-            /*
-            Config.Import();
-            UserData.ExportOldConfig();
-            */
+            
+           // Config.Import();
+           // UserData.ExportOldConfig();
+            
 
             // read user settings
             UserData.Import();

@@ -6,25 +6,43 @@
         xmlns:local="clr-namespace:WorkTimeTracker"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WorkTimeTracker.wnd_Settings"
         mc:Ignorable="d"
-        Title="Settings" Height="513.333" Width="314.666">
-    <Grid>
+        Title="Settings" Height="513.333" Width="367.466" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid >
 
         <xctk:ColorPicker HorizontalAlignment="Left" VerticalAlignment="Top" Margin="235,55,0,0"/>
         <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="218,20,0,0" VerticalAlignment="Top"/>
-        <GroupBox Header="Breaks" Margin="10,92,10,0" VerticalAlignment="Top" Height="108" >
-            <Grid>
-                <ComboBox HorizontalAlignment="left" VerticalAlignment="Top" Width="120" Margin="10,10,0,0"/>
-                <CheckBox Margin="10,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <Button Content="Add" HorizontalAlignment="Right" Margin="0,10,70,0" VerticalAlignment="Top" Width="55"/>
-                <Button Content="Remove" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="55"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Thresholds" HorizontalAlignment="Left" Height="100" Margin="20,205,0,-36" VerticalAlignment="Top" Width="239">
-            <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,10,0,0"/>
-        </GroupBox>
-        <GroupBox Header="Subtitles" HorizontalAlignment="Left" Height="100" Margin="20,328,0,-31" VerticalAlignment="Top" Width="239">
-            <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,10,0,0"/>
-        </GroupBox>
+        
+        
+        <ListView Height="146" Margin="10,90,0,0" Name="lv" VerticalAlignment="Top" HorizontalAlignment="Left" Width="284" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Enabled" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox CommandParameter="{Binding}" IsChecked="{Binding isEnabled}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding strName}"/>
+                    <GridViewColumn Header="Start" DisplayMemberBinding="{Binding Path=dtStartTime, StringFormat='HH:mm'}" />
+                    <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Path=tsDuration }"/>
+                    <GridViewColumn Header="Edit">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Edit" Click="EditCategory" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Delete">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" Click="DeleteCategory" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
     </Grid>
 </Window>
