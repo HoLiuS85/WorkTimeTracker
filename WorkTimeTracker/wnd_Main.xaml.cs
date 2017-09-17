@@ -42,7 +42,7 @@ namespace WorkTimeTracker
         private void OnTrayClick(object sender, EventArgs e)
         {
             if ((e as System.Windows.Forms.MouseEventArgs).Button == System.Windows.Forms.MouseButtons.Left)
-                WindowOpener(new wndNotification());
+                WindowOpener(new wnd_Notification());
         }
 
         private void OnSettingsClick(object sender, EventArgs e)
@@ -52,7 +52,7 @@ namespace WorkTimeTracker
 
         private void OnHistoryClick(object sender, EventArgs e)
         {
-            // this.FrmOpener(new frmHistory());
+            WindowOpener(new wnd_History());
         }
 
         private void OnExitClick(object sender, EventArgs e)

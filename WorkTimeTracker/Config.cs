@@ -196,9 +196,43 @@ namespace WorkTimeTracker
     [Serializable]
     public class Day
     {
-        public DateTime dtStartTime;
-        public DateTime dtEndTime;
-        public int iID;
+        public DateTime dtStartTime { get; set; }
+        public DateTime dtEndTime { get; set; }
+        public TimeSpan tsOvertime
+        {
+            get
+            {
+                if (!dtEndTime.Equals(DateTime.MinValue))
+                {
+                    return tsWorktime.Subtract(TimeSpan.FromMinutes(UserData.getWorkDuration()));
+                }
+                else
+                {
+                    return TimeSpan.FromTicks((long)0);
+                }
+            }
+        }
+        public TimeSpan tsWorktime
+        {
+            get
+            {
+                if (!dtEndTime.Equals(DateTime.MinValue))
+                {
+                    DateTime dateTime = dtEndTime;
+                    foreach (Break lBreak in UserData.getBreaks())
+                    {
+                        if ((!lBreak.isEnabled || !(dtStartTime.TimeOfDay < lBreak.dtStartTime.TimeOfDay) ? false : dtEndTime.TimeOfDay > lBreak.dtStartTime.TimeOfDay))
+                            dateTime = dateTime.Add(-lBreak.tsDuration);
+                    }
+                    return dateTime - dtStartTime;
+                }
+                else
+                {
+                    return TimeSpan.Zero;
+                }
+            }
+        }
+        public int iID { get; set; }
 
         public Day()
         {

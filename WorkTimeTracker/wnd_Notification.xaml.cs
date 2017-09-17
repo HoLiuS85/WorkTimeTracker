@@ -18,12 +18,12 @@ namespace WorkTimeTracker
     /// <summary>
     /// Interaction logic for wndNotification.xaml
     /// </summary>
-    public partial class wndNotification : Window
+    public partial class wnd_Notification : Window
     {
         int WorkdayPercent;
         bool isWorkdayStarted;
 
-        public wndNotification()
+        public wnd_Notification()
         {
             InitializeComponent();
         }
