@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WorkTimeTracker
 {
@@ -20,9 +11,6 @@ namespace WorkTimeTracker
     /// </summary>
     public partial class wnd_Notification : Window
     {
-        int WorkdayPercent;
-        bool isWorkdayStarted;
-
         public wnd_Notification()
         {
             InitializeComponent();
@@ -31,20 +19,17 @@ namespace WorkTimeTracker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Aero.enable(5, this);
-
-            WorkdayPercent = WorkdayHandler.getPercent();
-            isWorkdayStarted = WorkdayHandler.getIsStarted();
-
-            labelHeaderSubtitle.Text = Helper.getSubtitle(WorkdayPercent);
+                        
+            labelHeaderSubtitle.Text = Helper.getSubtitle(WorkdayHandler.getPercent());
             labelRemainingTime.Text = UserData.getWorkTimeRemaining().ToString("hh\\:mm");
             labelRemainingText.Text = UserData.getWorkTimeRemaining() < TimeSpan.Zero ? "Overtime:" : "Remaining Time";
             labelElapsedTime.Text = UserData.getWorkTimeElapsed().ToString("hh\\:mm");
             labelEndTime.Text = UserData.getWorkTimeEnd().ToShortTimeString();
             labelStartTime.Text = UserData.getWorkTimeStart().ToShortTimeString();
-            progressbarWorktime.Value = WorkdayPercent;
-            progressbarWorktime.Foreground = new SolidColorBrush(Helper.getProgressColor(WorkdayPercent));
+            progressbarWorktime.Value = WorkdayHandler.getPercent();
+            progressbarWorktime.Foreground = new SolidColorBrush(Helper.getProgressColor(WorkdayHandler.getPercent()));
 
-            if (!isWorkdayStarted)
+            if (!WorkdayHandler.getIsStarted())
             {
                 grid.Children.Remove(labelWorkdayModify);
                 labelWorkdayStartEnd.Text = "Start new Workday";
@@ -78,7 +63,7 @@ namespace WorkTimeTracker
 
         private void labelStartEnd_OnMouseClick(object sender, MouseButtonEventArgs e)
         {
-            if (!isWorkdayStarted)
+            if (!WorkdayHandler.getIsStarted())
                 Config.openForm = OpenForm.StartModify;
             else
                 Config.openForm = OpenForm.End;

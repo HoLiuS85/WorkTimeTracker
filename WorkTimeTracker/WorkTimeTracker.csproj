@@ -146,7 +146,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="res\logo_hourglass.png" />
+    <Resource Include="res\logo_hourglass.png" />
     <Content Include="res\Xceed.Wpf.Toolkit.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

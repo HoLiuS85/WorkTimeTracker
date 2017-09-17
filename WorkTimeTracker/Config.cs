@@ -1,14 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Xml;
 
 namespace WorkTimeTracker
 {
-	public static class Config
+    public static class Config
 	{
 		//public static int iWorkDuration;
   //      public static int iCalcInterval;
