@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WorkTimeTracker
@@ -30,7 +31,7 @@ namespace WorkTimeTracker
         {
             return _cTrayIcon;
         }
-        
+
         public static void setInterval(Int32 iInterval)
         {
             _iInterval = iInterval;
@@ -105,7 +106,7 @@ namespace WorkTimeTracker
         }
         public static List<Day> getDays()
         {
-            return _lDays;
+            return _lDays.OrderBy(x => x.dtStartTime).ToList();
         }
 
         public static void setBreaks(List<Break> lBreaks)
@@ -116,7 +117,7 @@ namespace WorkTimeTracker
         }
         public static List<Break> getBreaks()
         {
-            return _lBreaks;
+            return _lBreaks.OrderBy(x => x.dtStartTime).ToList();
         }
 
         public static void setSubtitles(List<Subtitle> lSubtitles)
@@ -127,7 +128,7 @@ namespace WorkTimeTracker
         }
         public static List<Subtitle> getSubtitles()
         {
-            return _lSubtitles;
+            return _lSubtitles.OrderBy(x => x.iRangeStart).ToList(); ;
         }
 
         public static void setThresholds(List<Threshold> lThresholds)
@@ -138,7 +139,7 @@ namespace WorkTimeTracker
         }
         public static List<Threshold> getThresholds()
         {
-            return _lThresholds;
+            return _lThresholds.OrderBy(x => x.iValue).ToList();
         }
 
         public static String SerializeObject(object list)
@@ -177,8 +178,8 @@ namespace WorkTimeTracker
             _tsWorkTimeRemaining = Properties.Settings.Default.tsWorkTimeRemaining;
             _lDays = DeserializeObject(Properties.Settings.Default.listDays) as List<Day>;
             _lBreaks = DeserializeObject(Properties.Settings.Default.listBreaks) as List<Break>;
-            _lSubtitles = DeserializeObject(Properties.Settings.Default.listSubtitles) as List<Subtitle>;
             _lThresholds = DeserializeObject(Properties.Settings.Default.listThresholds) as List<Threshold>;
+            _lSubtitles = DeserializeObject(Properties.Settings.Default.listSubtitles) as List<Subtitle>;
         }
 
         public static void ExportOldConfig()

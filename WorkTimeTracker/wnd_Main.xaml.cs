@@ -12,8 +12,8 @@ namespace WorkTimeTracker
         public wndMain()
         {
             
-           // Config.Import();
-           // UserData.ExportOldConfig();
+           Config.Import();
+           UserData.ExportOldConfig();
             
 
             // read user settings
@@ -83,7 +83,7 @@ namespace WorkTimeTracker
             
             // Set Initial y-position on to of the start menu and x-position centered over the mouse
             windowPosition.X = mousePositon.X - (tempWindow.ActualWidth / 2);
-            windowPosition.Y = ScreenSize.Y + ScreenSize.Height - tempWindow.ActualHeight;
+            windowPosition.Y = ScreenSize.Bottom - tempWindow.ActualHeight;
 
             // Adjust X position to not overlap screen borders
             if (windowPosition.X + tempWindow.ActualWidth > ScreenSize.Right)

@@ -29,12 +29,12 @@ namespace WorkTimeTracker
             catch { /*Can appen if window is already closing*/}
         }
 
-        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        private void buttonCancel_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        private void buttonSave_OnClick(object sender, RoutedEventArgs e)
         {
             WorkdayHandler.WorkdayEnd(pickerEndtime.Value.Value);
             base.Close();

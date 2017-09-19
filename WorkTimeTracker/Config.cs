@@ -249,9 +249,9 @@ namespace WorkTimeTracker
     [Serializable]
     public class Subtitle
     {
-        public int iRangeStart;
-        public int iRangeEnd;
-        public string strSubtitle;
+        public int iRangeStart { get; set; }
+        public int iRangeEnd { get; set; }
+        public string strSubtitle { get; set; }
 
         public Subtitle(int RangeStart, int RangeEnd, string Subtitle)
         {
@@ -264,9 +264,10 @@ namespace WorkTimeTracker
     [Serializable]
     public class Threshold
     {
-        public string strName;
-        public Colour cColor;
-        public int iValue;
+        public string strName { get; set; }
+        public Colour cColor { get; set; }
+        public int iValue { get; set; }
+        public Color color { get { return Color.FromArgb(cColor.A, cColor.R, cColor.G, cColor.B); } set { cColor = value; } }
 
         public Threshold(Color color, int value, string name)
         {

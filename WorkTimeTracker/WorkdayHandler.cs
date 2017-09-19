@@ -48,11 +48,14 @@ namespace WorkTimeTracker
 			return false;
 		}
 
-		public static void WorkdayCalculationStop()
-		{
-            if (!tWorkTime.Equals(null) && tWorkTime.Enabled.Equals(true))
-                tWorkTime.Stop();
-		}
+        public static void WorkdayCalculationStop()
+        {
+            if (tWorkTime != null)
+            {
+                if (!tWorkTime.Enabled.Equals(true))
+                    tWorkTime.Stop();
+            }
+        }
 
 		public static void WorkdayEnd(DateTime EndTime)
 		{

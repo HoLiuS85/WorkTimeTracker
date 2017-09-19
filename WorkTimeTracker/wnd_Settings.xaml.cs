@@ -20,36 +20,78 @@ namespace WorkTimeTracker
     /// </summary>
     public partial class wnd_Settings : Window
     {
+        Int32 iWorkDuration;
+        Color cTrayIconColor;
+        ObservableCollection<Break> lBreak;
+        ObservableCollection<Subtitle> lSubtitle;
+        ObservableCollection<Threshold> lThreshold;
+
         public wnd_Settings()
         {
             InitializeComponent();
-
-            this.DataContext = this;
-            
-            lv.ItemsSource = UserData.getBreaks();
         }
 
-        private void EditCategory(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Import configuration into temporary variables
+            iWorkDuration = UserData.getWorkDuration();
+            cTrayIconColor = UserData.getTrayIconColor();
+            lBreak = new ObservableCollection<Break>(UserData.getBreaks());
+            lSubtitle = new ObservableCollection<Subtitle>(UserData.getSubtitles());
+            lThreshold = new ObservableCollection<Threshold>(UserData.getThresholds());
+
+            //Intitialize user control values
+            iudWorkDuration.Value = iWorkDuration;
+            cpTrayIcon.SelectedColor = cTrayIconColor;
+            lvBreaks.ItemsSource = lBreak;
+            lvSubtitles.ItemsSource = lSubtitle;
+            lvThresholds.ItemsSource = lThreshold;
+        }
+
+        private void buttonItemDelete_OnClick(object sender, RoutedEventArgs e)
         {
             Button b = sender as Button;
-            //ProductCategory productCategory = b.CommandParameter as ProductCategory;
-           // MessageBox.Show(productCategory.Id);
+
+            if(b.CommandParameter is Break)
+                lBreak.Remove(b.CommandParameter as Break);
+
+            if (b.CommandParameter is Subtitle)
+                lSubtitle.Remove(b.CommandParameter as Subtitle);
+
+            if (b.CommandParameter is Threshold)
+                lThreshold.Remove(b.CommandParameter as Threshold);
         }
 
-        private void DeleteCategory(object sender, RoutedEventArgs e)
+        private void buttonItemAdd_Click(object sender, RoutedEventArgs e)
         {
             Button b = sender as Button;
-            //ProductCategory productCategory = b.CommandParameter as ProductCategory;
-            // MessageBox.Show(productCategory.Id);
-        }
-    }
 
-    public class Brk
-    {        
-        public String Name { get; set; }
-        public Boolean Enabled { get; set; }
-        public TimeSpan Duration { get; set; }
-        public DateTime StartTime { get; set; }
-        
+            if (b.Tag.ToString() == "break")
+                lBreak.Add(new Break(true, DateTime.Now, TimeSpan.Zero, String.Empty));
+
+            if (b.Tag.ToString() == "subtitle")
+                lSubtitle.Add(new Subtitle(0,0,String.Empty));
+
+            if (b.Tag.ToString() == "threshold")
+                lThreshold.Add(new Threshold(Colors.Transparent, 0, String.Empty));
+
+
+        }
+
+        private void buttonCancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void buttonSave_OnClick(object sender, RoutedEventArgs e)
+        {
+            UserData.setWorkDuration(iWorkDuration);
+            UserData.setTrayIconColor(cTrayIconColor);
+            UserData.setBreaks(lBreak.ToList());
+            UserData.setSubtitles(lSubtitle.ToList());
+            UserData.setThresholds(lThreshold.ToList());
+
+            Close();
+        }
     }
 }

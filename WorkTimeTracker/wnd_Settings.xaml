@@ -6,43 +6,147 @@
         xmlns:local="clr-namespace:WorkTimeTracker"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WorkTimeTracker.wnd_Settings"
         mc:Ignorable="d"
-        Title="Settings" Height="513.333" Width="367.466" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Settings" Height="742.523" WindowStartupLocation="CenterScreen" SizeToContent="Width" Loaded="Window_Loaded">
     <Grid >
 
-        <xctk:ColorPicker HorizontalAlignment="Left" VerticalAlignment="Top" Margin="235,55,0,0"/>
-        <xctk:IntegerUpDown HorizontalAlignment="Left" Margin="218,20,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Text="Work Duration:" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <xctk:IntegerUpDown Name="iudWorkDuration"  HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top"  Width="60"/>
+        <TextBlock HorizontalAlignment="Left" Text="Tray Icon Color :" Margin="10,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <xctk:ColorPicker Name="cpTrayIcon" HorizontalAlignment="Right" Margin="0,35,10,0" VerticalAlignment="Top"  Width="60"/>
         
-        
-        <ListView Height="146" Margin="10,90,0,0" Name="lv" VerticalAlignment="Top" HorizontalAlignment="Left" Width="284" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Enabled" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox CommandParameter="{Binding}" IsChecked="{Binding isEnabled}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding strName}"/>
-                    <GridViewColumn Header="Start" DisplayMemberBinding="{Binding Path=dtStartTime, StringFormat='HH:mm'}" />
-                    <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Path=tsDuration }"/>
-                    <GridViewColumn Header="Edit">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Edit" Click="EditCategory" CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Delete">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Delete" Click="DeleteCategory" CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <GroupBox Header="Breaks" Margin="10,70,10,0" VerticalAlignment="Top" >
+            <Grid>
+                <ListView Height="120" Margin="10,10,10,40" Name="lvBreaks" VerticalAlignment="Top" BorderThickness="1" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox CommandParameter="{Binding}" IsChecked="{Binding isEnabled}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding strName}" BorderThickness="0"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Start">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <xctk:DateTimeUpDown Value="{Binding dtStartTime}" Format="ShortTime" Kind="Local" CultureInfo="de-DE"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Duration">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <xctk:DateTimeUpDown Value="{Binding tsDuration}" Format="ShortTime" Kind="Local" CultureInfo="de-DE"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete" Click="buttonItemDelete_OnClick" CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Name="buttonBreakAdd" Tag="break" Content="Add" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="55" Click="buttonItemAdd_Click"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Thresholds" Margin="10,270,10,0" VerticalAlignment="Top" >
+            <Grid>
+                <ListView Height="120" Margin="10,10,10,40" Name="lvThresholds" VerticalAlignment="Top" BorderThickness="1" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding strName}" BorderThickness="0"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Threshold">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <xctk:IntegerUpDown Value="{Binding iValue}" Maximum="100" Minimum="0" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Color">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <xctk:ColorPicker SelectedColor="{Binding color}"  Width="50"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete" Click="buttonItemDelete_OnClick" CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Name="buttonThresholdAdd" Tag="threshold" Content="Add" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="55" Click="buttonItemAdd_Click"/>
+
+
+            </Grid>
+        </GroupBox>
+
+
+        <GroupBox Header="Subtitles" Margin="10,470,10,0" VerticalAlignment="Top" >
+            <Grid>
+                <ListView Height="120" Margin="10,10,10,40" Name="lvSubtitles" VerticalAlignment="Top" BorderThickness="1" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Start">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <xctk:IntegerUpDown Value="{Binding iRangeStart}" Maximum="100" Minimum="0" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="End">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <xctk:IntegerUpDown Value="{Binding iRangeEnd}" Maximum="100" Minimum="0" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Subtitle">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding strSubtitle}" BorderThickness="0" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete" Click="buttonItemDelete_OnClick" CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Name="buttonSubtitleAdd" Tag="subtitle" Content="Add" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="55" Click="buttonItemAdd_Click"/>
+            </Grid>
+        </GroupBox>
+        <Button Name="buttonSave"  Content="Save" HorizontalAlignment="Right" Margin="0,0,75,10" VerticalAlignment="Bottom" Width="55" Click="buttonSave_OnClick"/>
+        <Button Name="buttonCancel"  Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="55" Click="buttonCancel_OnClick"/>
+
+
 
     </Grid>
 </Window>

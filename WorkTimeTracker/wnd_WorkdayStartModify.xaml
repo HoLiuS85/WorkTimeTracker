@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WorkTimeTracker"
         xmlns:xctk1="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="wnd_WorkdayStart" MinWidth="180" WindowStyle="None" ShowInTaskbar="False" Topmost="True" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated" ResizeMode="NoResize">
+        Title="wnd_WorkdayStart" MinWidth="180" WindowStyle="None" ShowInTaskbar="False" Topmost="True" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBlock Name="labelHeaderTitle" HorizontalAlignment="Left" FontWeight="Bold" Margin="5,5,0,0" TextWrapping="Wrap" Text="Start new Workday" VerticalAlignment="Top"/>
         <TextBlock Name="labelStartText" HorizontalAlignment="Left" Margin="10,30,0,0" TextWrapping="Wrap" Text="Start time:" VerticalAlignment="Top" />
