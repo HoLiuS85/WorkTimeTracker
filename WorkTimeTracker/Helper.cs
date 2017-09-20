@@ -15,25 +15,25 @@ namespace WorkTimeTracker
         // Get a random subtitle corresponding to workday progress by percent
         public static String getSubtitle(int percent)
         {
-            List<Subtitle> lTemp = UserData.getSubtitles().FindAll((Subtitle item) => (percent < item.iRangeStart ? false : percent <= item.iRangeEnd));
-            return lTemp[(new Random()).Next(0, lTemp.Count)].strSubtitle;
+            List<Subtitle> lTemp = UserData.getSubtitles().FindAll((Subtitle item) => (percent < item.rangestart ? false : percent <= item.rangeend));
+            return lTemp[(new Random()).Next(0, lTemp.Count)].subtitle;
         }
 
         // Get a color corresponding to workday progress by percent
         public static Colour getProgressColor(int percent)
         {
-            Threshold thresholdBad = UserData.getThresholds().Find((Threshold item) => item.strName == "bad");
-            Threshold thresholdMedium = UserData.getThresholds().Find((Threshold item) => item.strName == "medium");
-            Threshold thresholdGood = UserData.getThresholds().Find((Threshold item) => item.strName == "good");
+            Threshold thresholdBad = UserData.getThresholds().Find((Threshold item) => item.name == "bad");
+            Threshold thresholdMedium = UserData.getThresholds().Find((Threshold item) => item.name == "medium");
+            Threshold thresholdGood = UserData.getThresholds().Find((Threshold item) => item.name == "good");
 
-            if (percent < thresholdMedium.iValue)
-                return thresholdBad.cColor;
+            if (percent < thresholdMedium.value)
+                return thresholdBad.colour;
 
-            if (percent > thresholdMedium.iValue && percent < thresholdGood.iValue)
-                return thresholdMedium.cColor;
+            if (percent > thresholdMedium.value && percent < thresholdGood.value)
+                return thresholdMedium.colour;
 
-            if (percent > thresholdGood.iValue)
-                return thresholdGood.cColor;
+            if (percent > thresholdGood.value)
+                return thresholdGood.colour;
 
             return new Colour(Colors.LightGreen);
         }

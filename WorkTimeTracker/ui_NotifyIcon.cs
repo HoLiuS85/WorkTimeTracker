@@ -56,6 +56,9 @@ namespace WorkTimeTracker
                     }
                 }
             }
+
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
     }
 }

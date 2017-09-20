@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Media;
+using System.Xml;
 
 namespace WorkTimeTracker
 {
@@ -106,7 +108,7 @@ namespace WorkTimeTracker
         }
         public static List<Day> getDays()
         {
-            return _lDays.OrderBy(x => x.dtStartTime).ToList();
+            return _lDays.OrderBy(x => x.starttime).ToList();
         }
 
         public static void setBreaks(List<Break> lBreaks)
@@ -117,7 +119,7 @@ namespace WorkTimeTracker
         }
         public static List<Break> getBreaks()
         {
-            return _lBreaks.OrderBy(x => x.dtStartTime).ToList();
+            return _lBreaks.OrderBy(x => x.starttime).ToList();
         }
 
         public static void setSubtitles(List<Subtitle> lSubtitles)
@@ -128,7 +130,7 @@ namespace WorkTimeTracker
         }
         public static List<Subtitle> getSubtitles()
         {
-            return _lSubtitles.OrderBy(x => x.iRangeStart).ToList(); ;
+            return _lSubtitles.OrderBy(x => x.rangestart).ToList(); ;
         }
 
         public static void setThresholds(List<Threshold> lThresholds)
@@ -139,7 +141,7 @@ namespace WorkTimeTracker
         }
         public static List<Threshold> getThresholds()
         {
-            return _lThresholds.OrderBy(x => x.iValue).ToList();
+            return _lThresholds.OrderBy(x => x.value).ToList();
         }
 
         public static String SerializeObject(object list)
@@ -164,10 +166,9 @@ namespace WorkTimeTracker
                 ms.Position = 0;
                 return new BinaryFormatter().Deserialize(ms);
             }
-
         }
 
-        public static void Import()
+        public static void ReadConfig()
         {
             _cTrayIcon = (Colour)DeserializeObject(Properties.Settings.Default.colorTrayIcon);
             _iInterval = Properties.Settings.Default.intInterval;
@@ -196,5 +197,159 @@ namespace WorkTimeTracker
             setBreaks(Config.lBreaks);
             setDays(Config.lDays);
         }
+
+        public static void ConfigToXML(string filename)
+        {
+            using (XmlWriter xmlWriter = XmlWriter.Create(filename, new XmlWriterSettings()
+            {
+                Indent = true,
+                IndentChars = "\t",
+                NewLineChars = "\r\n",
+                NewLineHandling = NewLineHandling.Replace
+            }))
+            {
+                xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartElement("worktimetracker");
+                xmlWriter.WriteAttributeString("interval", getInterval().ToString());
+                xmlWriter.WriteAttributeString("workduration", getWorkDuration().ToString());
+                xmlWriter.WriteAttributeString("headcolor", getTrayIconColor().ToString());
+                xmlWriter.WriteStartElement("breaks");
+                foreach (Break lBreak in getBreaks())
+                {
+                    xmlWriter.WriteStartElement("break");
+                    xmlWriter.WriteAttributeString("name", lBreak.name);
+                    xmlWriter.WriteAttributeString("enabled", lBreak.enabled.ToString());
+                    xmlWriter.WriteAttributeString("start", lBreak.starttime.ToBinary().ToString());
+                    xmlWriter.WriteAttributeString("duration", lBreak.duration.Ticks.ToString());
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("thresholds");
+                foreach (Threshold lThreshold in getThresholds())
+                {
+                    xmlWriter.WriteStartElement("threshold");
+                    xmlWriter.WriteAttributeString("name", lThreshold.name);
+                    xmlWriter.WriteAttributeString("value", lThreshold.value.ToString());
+                    xmlWriter.WriteAttributeString("color", lThreshold.colour.ToString());
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("phrases");
+                foreach (Subtitle lSubtitle in getSubtitles())
+                {
+                    xmlWriter.WriteStartElement("phrase");
+                    xmlWriter.WriteAttributeString("start", lSubtitle.rangestart.ToString());
+                    xmlWriter.WriteAttributeString("end", lSubtitle.rangeend.ToString());
+                    xmlWriter.WriteAttributeString("string", lSubtitle.subtitle);
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("history");
+                foreach (Day lDay in getDays())
+                {
+                    xmlWriter.WriteStartElement("day");
+                    xmlWriter.WriteAttributeString("start", lDay.starttime.ToBinary().ToString());
+                    xmlWriter.WriteAttributeString("end", lDay.endtime.ToBinary().ToString());
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+            }
+        }
+
+        public static void XMLToConfig(string filename)
+        {
+            XmlDocument xmlDocument = new XmlDocument() ;
+            xmlDocument.Load(@filename);
+
+            foreach (XmlNode childNode in xmlDocument.ChildNodes)
+            {
+                if (childNode.Name.ToLower().Equals("worktimetracker"))
+                {
+                    setInterval(Convert.ToInt32(childNode.Attributes["interval"].Value));
+                    setWorkDuration(Convert.ToInt32(childNode.Attributes["workduration"].Value));
+                    setTrayIconColor((Color)ColorConverter.ConvertFromString(childNode.Attributes["headcolor"].Value));
+                    
+                    foreach (XmlNode xmlNodes in childNode.ChildNodes)
+                    {
+                        string lower = xmlNodes.Name.ToLower();
+                        if (lower == "breaks")
+                        {
+                            List<Break> lTemp = new List<Break>();
+
+                            foreach (XmlNode childNode1 in xmlNodes.ChildNodes)
+                            {
+                                if (childNode1.Name.ToLower().Equals("break"))
+                                {
+                                    String name = childNode1.Attributes["name"].Value;
+                                    Boolean enabled = Convert.ToBoolean(childNode1.Attributes["enabled"].Value);
+                                    DateTime start = DateTime.FromBinary(Convert.ToInt64(childNode1.Attributes["start"].Value));
+                                    TimeSpan duration = TimeSpan.FromTicks(Convert.ToInt64(childNode1.Attributes["duration"].Value));
+
+                                    lTemp.Add(new Break(name, enabled, duration, start));
+                                }
+                            }
+
+                            setBreaks(lTemp);
+                        }
+                        else if (lower == "thresholds")
+                        {
+                            List<Threshold> lTemp = new List<Threshold>();
+
+                            foreach (XmlNode xmlNodes1 in xmlNodes.ChildNodes)
+                            {
+                                if (xmlNodes1.Name.ToLower().Equals("threshold"))
+                                {
+                                    String name = xmlNodes1.Attributes["name"].Value;
+                                    Int32 value = Convert.ToInt32(xmlNodes1.Attributes["value"].Value);
+                                    Color color = (Color)ColorConverter.ConvertFromString(childNode.Attributes["color"].Value);
+
+                                    lTemp.Add(new Threshold(color, value, name ));
+                                }
+                            }
+
+                            setThresholds(lTemp);
+                        }
+                        else if (lower == "history")
+                        {
+                            List<Day> lTemp = new List<Day>();
+
+                            foreach (XmlNode childNode2 in xmlNodes.ChildNodes)
+                            {
+                                if (childNode2.Name.ToLower().Equals("day"))
+                                {
+                                    DateTime start = DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["start"].Value));
+                                    DateTime end = DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["end"].Value));
+
+                                    lTemp.Add(new Day(start, end));
+                                }
+                            }
+
+                            setDays(lTemp);
+                        }
+                        else if (lower == "phrases")
+                        {
+                            List<Subtitle> lTemp = new List<Subtitle>();
+                            
+                            foreach (XmlNode xmlNodes2 in xmlNodes.ChildNodes)
+                            {
+                                if (xmlNodes2.Name.ToLower().Equals("phrase"))
+                                {
+                                    String subtitle = xmlNodes2.Attributes["string"].Value;
+                                    Int32 end = Convert.ToInt32(xmlNodes2.Attributes["end"].Value);
+                                    Int32 start = Convert.ToInt32(xmlNodes2.Attributes["start"].Value);
+
+                                    lTemp.Add(new Subtitle(start, end, subtitle));
+                                }
+                            }
+
+                            setSubtitles(lTemp);
+                        }
+                    }
+                }
+            }
+
+
+        }
+
     }
 }

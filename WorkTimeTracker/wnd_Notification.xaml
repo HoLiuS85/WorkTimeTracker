@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkTimeTracker"
         mc:Ignorable="d"
-        Title="wndNotification" MinWidth="250" WindowStyle="None" ShowInTaskbar="False" Topmost="True" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated" ResizeMode="NoResize">
+        Title="wndNotification" MinWidth="150" WindowStyle="None" ShowInTaskbar="False" Topmost="True" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated" ResizeMode="NoResize">
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -15,7 +15,7 @@
         <!-- Header Section -->
         <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1"/>
         <Image Name="ImageHeaderLogo" HorizontalAlignment="Left" Stretch="Uniform"  Source="/res/logo_hourglass.png" Height="40" Width="40"  Margin="10,5,0,5" Grid.Row="0" VerticalAlignment="Top" />
-        <TextBlock Name="labelHeaderTitle" HorizontalAlignment="Left" FontWeight="Bold" Margin="50,5,0,0" TextWrapping="Wrap" Text="Worktime statistics" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBlock Name="labelHeaderTitle" HorizontalAlignment="Left" FontWeight="Bold" Margin="50,5,20,0" TextWrapping="Wrap" Text="Worktime statistics" VerticalAlignment="Top" Grid.Row="0"/>
         <TextBlock Name="labelHeaderSubtitle" HorizontalAlignment="Left" Margin="50,25,20,0" TextWrapping="Wrap" Text="Let's keep track of your day" VerticalAlignment="Top"  Grid.Row="0"/>
         <!-- Main Section -->
         <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="0,0,0,1"/>

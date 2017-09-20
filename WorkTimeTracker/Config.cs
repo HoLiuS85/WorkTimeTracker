@@ -53,10 +53,10 @@ namespace WorkTimeTracker
                 foreach (Break lBreak in Config.lBreaks)
                 {
                     xmlWriter.WriteStartElement("break");
-                    xmlWriter.WriteAttributeString("name", lBreak.strName);
-                    xmlWriter.WriteAttributeString("enabled", lBreak.isEnabled.ToString());
-                    xmlWriter.WriteAttributeString("start", lBreak.dtStartTime.ToBinary().ToString());
-                    xmlWriter.WriteAttributeString("duration", lBreak.tsDuration.Ticks.ToString());
+                    xmlWriter.WriteAttributeString("name", lBreak.name);
+                    xmlWriter.WriteAttributeString("enabled", lBreak.enabled.ToString());
+                    xmlWriter.WriteAttributeString("start", lBreak.starttime.ToBinary().ToString());
+                    xmlWriter.WriteAttributeString("duration", lBreak.duration.Ticks.ToString());
                     xmlWriter.WriteEndElement();
                 }
                 xmlWriter.WriteEndElement();
@@ -64,9 +64,9 @@ namespace WorkTimeTracker
                 foreach (Threshold lThreshold in Config.lThresholds)
                 {
                     xmlWriter.WriteStartElement("threshold");
-                    xmlWriter.WriteAttributeString("name", lThreshold.strName);
-                    xmlWriter.WriteAttributeString("value", lThreshold.iValue.ToString());
-                    xmlWriter.WriteAttributeString("color", ColorToArgb(lThreshold.cColor).ToString());
+                    xmlWriter.WriteAttributeString("name", lThreshold.name);
+                    xmlWriter.WriteAttributeString("value", lThreshold.value.ToString());
+                    xmlWriter.WriteAttributeString("color", ColorToArgb(lThreshold.colour).ToString());
                     xmlWriter.WriteEndElement();
                 }
                 xmlWriter.WriteEndElement();
@@ -74,9 +74,9 @@ namespace WorkTimeTracker
                 foreach (Subtitle lSubtitle in Config.lSubtitles)
                 {
                     xmlWriter.WriteStartElement("phrase");
-                    xmlWriter.WriteAttributeString("start", lSubtitle.iRangeStart.ToString());
-                    xmlWriter.WriteAttributeString("end", lSubtitle.iRangeEnd.ToString());
-                    xmlWriter.WriteAttributeString("string", lSubtitle.strSubtitle);
+                    xmlWriter.WriteAttributeString("start", lSubtitle.rangestart.ToString());
+                    xmlWriter.WriteAttributeString("end", lSubtitle.rangeend.ToString());
+                    xmlWriter.WriteAttributeString("string", lSubtitle.subtitle);
                     xmlWriter.WriteEndElement();
                 }
                 xmlWriter.WriteEndElement();
@@ -84,8 +84,8 @@ namespace WorkTimeTracker
                 foreach (Day lDay in Config.lDays)
                 {
                     xmlWriter.WriteStartElement("day");
-                    xmlWriter.WriteAttributeString("start", lDay.dtStartTime.ToBinary().ToString());
-                    xmlWriter.WriteAttributeString("end", lDay.dtEndTime.ToBinary().ToString());
+                    xmlWriter.WriteAttributeString("start", lDay.starttime.ToBinary().ToString());
+                    xmlWriter.WriteAttributeString("end", lDay.endtime.ToBinary().ToString());
                     xmlWriter.WriteEndElement();
                 }
                 xmlWriter.WriteEndElement();
@@ -113,7 +113,7 @@ namespace WorkTimeTracker
                             {
                                 if (childNode1.Name.ToLower().Equals("break"))
                                 {
-                                    lBreaks.Add(new Break(Convert.ToBoolean(childNode1.Attributes["enabled"].Value), DateTime.FromBinary(Convert.ToInt64(childNode1.Attributes["start"].Value)), TimeSpan.FromTicks(Convert.ToInt64(childNode1.Attributes["duration"].Value)), childNode1.Attributes["name"].Value));
+                                    lBreaks.Add(new Break(childNode1.Attributes["name"].Value, Convert.ToBoolean(childNode1.Attributes["enabled"].Value), TimeSpan.FromTicks(Convert.ToInt64(childNode1.Attributes["duration"].Value)), DateTime.FromBinary(Convert.ToInt64(childNode1.Attributes["start"].Value))));
                                 }
                             }
                         }
@@ -133,7 +133,7 @@ namespace WorkTimeTracker
                             {
                                 if (childNode2.Name.ToLower().Equals("day"))
                                 {
-                                    lDays.Add(new Day(lDays.Count + 1, DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["start"].Value)), DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["end"].Value))));
+                                    lDays.Add(new Day(DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["start"].Value)), DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["end"].Value))));
                                 }
                             }
                         }
@@ -179,101 +179,204 @@ namespace WorkTimeTracker
     [Serializable]
     public class Break
     {
-        public string strName { get; set; }
-        public bool isEnabled { get; set; }
-        public TimeSpan tsDuration { get; set; }
-        public DateTime dtStartTime { get; set; }
+        #region Declaration
+        private String _name;
+        private Boolean _enabled;
+        private TimeSpan _duration;
+        private DateTime _starttime;
+        #endregion
 
-        public Break(bool enabled, DateTime starttime, TimeSpan duration, string name)
+        #region Getter/Setter
+        public String name
         {
-            this.isEnabled = enabled;
-            this.dtStartTime = starttime;
-            this.tsDuration = duration;
-            this.strName = name;
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+        public Boolean enabled
+        {
+            get
+            {
+                return _enabled;
+            }
+            set
+            {
+                _enabled = value;
+            }
+        }
+        public TimeSpan duration
+        {
+            get
+            {
+                return _duration;
+            }
+            set
+            {
+                _duration = value;
+            }
+        }
+        public DateTime durationasdt
+        {
+            get
+            {
+                return new DateTime().AddHours(_duration.Hours).AddMinutes(_duration.Minutes);
+            }
+            set
+            {
+                _duration = new TimeSpan(0, value.Hour, value.Minute, 0);
+            }
+        }
+        public DateTime starttime
+        {
+            get
+            {
+                return _starttime;
+            }
+            set
+            {
+                _starttime = value;
+            }
+        }
+        #endregion
+
+        public Break(String name, Boolean enabled, TimeSpan duration, DateTime starttime )
+        {
+            DateTime asd = new DateTime().AddHours(_duration.Hours).AddMinutes(_duration.Minutes);
+            _enabled = enabled;
+            _starttime = starttime;
+            _duration = duration;
+            _name = name;
         }
     }
 
     [Serializable]
     public class Day
     {
-        public DateTime dtStartTime { get; set; }
-        public DateTime dtEndTime { get; set; }
-        public TimeSpan tsOvertime
+        #region Declaration
+        private DateTime _starttime;
+        private DateTime _endtime;
+        #endregion
+
+        #region Setter/Getter
+        public DateTime starttime
         {
             get
             {
-                if (!dtEndTime.Equals(DateTime.MinValue))
+                return _starttime;
+            }
+            set
+            {
+                _starttime = value;
+            }
+        }
+        public DateTime endtime
+        {
+            get
+            {
+                return _endtime;
+            }
+            set
+            {
+                _endtime = value;
+            }
+        }
+        public DateTime overtime
+        {
+            get
+            {
+                if (!_endtime.Equals(DateTime.MinValue))
                 {
-                    return tsWorktime.Subtract(TimeSpan.FromMinutes(UserData.getWorkDuration()));
+                    return worktime.Subtract(TimeSpan.FromMinutes(UserData.getWorkDuration()));
                 }
                 else
                 {
-                    return TimeSpan.FromTicks((long)0);
+                    return DateTime.MinValue;
                 }
             }
         }
-        public TimeSpan tsWorktime
+        public DateTime worktime
         {
             get
             {
-                if (!dtEndTime.Equals(DateTime.MinValue))
+                if (!_endtime.Equals(DateTime.MinValue))
                 {
-                    DateTime dateTime = dtEndTime;
+                    DateTime dateTime = _endtime;
                     foreach (Break lBreak in UserData.getBreaks())
                     {
-                        if ((!lBreak.isEnabled || !(dtStartTime.TimeOfDay < lBreak.dtStartTime.TimeOfDay) ? false : dtEndTime.TimeOfDay > lBreak.dtStartTime.TimeOfDay))
-                            dateTime = dateTime.Add(-lBreak.tsDuration);
+                        if ((!lBreak.enabled || !(_starttime.TimeOfDay < lBreak.starttime.TimeOfDay) ? false : _endtime.TimeOfDay > lBreak.starttime.TimeOfDay))
+                            dateTime = dateTime.Add(-lBreak.duration);
                     }
-                    return dateTime - dtStartTime;
+                    dateTime = dateTime.Add(new TimeSpan(_starttime.TimeOfDay.Hours, _starttime.TimeOfDay.Minutes, _starttime.TimeOfDay.Seconds));
+                    return dateTime;
                 }
                 else
                 {
-                    return TimeSpan.Zero;
+                    return DateTime.MinValue;
                 }
             }
         }
-        public int iID { get; set; }
+        #endregion
 
         public Day()
         {
         }
 
-        public Day(int ID, DateTime StartTime, DateTime EndTime)
+        public Day( DateTime StartTime, DateTime EndTime)
         {
-            this.iID = ID;
-            this.dtStartTime = StartTime;
-            this.dtEndTime = EndTime;
+            this._starttime = StartTime;
+            this._endtime = EndTime;
         }
     }
 
     [Serializable]
     public class Subtitle
     {
-        public int iRangeStart { get; set; }
-        public int iRangeEnd { get; set; }
-        public string strSubtitle { get; set; }
+        #region Declaration
+        private Int32 _rangestart;
+        private Int32 _rangeend;
+        private String _subtitle;
+        #endregion
 
-        public Subtitle(int RangeStart, int RangeEnd, string Subtitle)
+        #region Getter/Setter
+        public Int32 rangestart { get { return _rangestart; } set { _rangestart = value; } }
+        public Int32 rangeend { get { return _rangeend; } set { _rangeend = value; } }
+        public String subtitle { get { return _subtitle; } set { _subtitle = value; } }
+        #endregion
+
+        public Subtitle(Int32 rangestart, Int32 rangeend, String subtitle)
         {
-            this.iRangeStart = RangeStart;
-            this.iRangeEnd = RangeEnd;
-            this.strSubtitle = Subtitle;
+            this._rangestart = rangestart;
+            this._rangeend = rangeend;
+            this._subtitle = subtitle;
         }
     }
 
     [Serializable]
     public class Threshold
     {
-        public string strName { get; set; }
-        public Colour cColor { get; set; }
-        public int iValue { get; set; }
-        public Color color { get { return Color.FromArgb(cColor.A, cColor.R, cColor.G, cColor.B); } set { cColor = value; } }
+        #region Declaration
+        private String _name;
+        private Colour _color;
+        private Int32 _value;
+        #endregion
 
-        public Threshold(Color color, int value, string name)
+        #region Getter/Setter
+        public Color color { get { return Color.FromArgb(_color.A, _color.R, _color.G, _color.B); } set { _color = value; } }
+        public Colour colour { get { return _color; } set { _color = value; } }
+        public String name { get { return _name; } set { _name = value; } }
+        public Int32 value { get { return _value; } set { _value = value; } }
+#endregion
+
+        public Threshold(Color color, Int32 value, String name)
         {
-            this.cColor = color;
-            this.iValue = value;
-            this.strName = name;
+            _color = color;
+            _value = value;
+            _name = name;
         }
     }
 
@@ -311,6 +414,11 @@ namespace WorkTimeTracker
         public static implicit operator Color(Colour colour)
         {
             return Color.FromArgb(colour.A, colour.R, colour.G, colour.B);
+        }
+
+        public override string ToString()
+        {
+            return Color.FromArgb(A, R, G, B).ToString();
         }
     }
     

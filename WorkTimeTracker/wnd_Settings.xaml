@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:WorkTimeTracker"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WorkTimeTracker.wnd_Settings"
         mc:Ignorable="d"
-        Title="Settings" Height="742.523" WindowStartupLocation="CenterScreen" SizeToContent="Width" Loaded="Window_Loaded">
+        Title="Settings" MinWidth="250" Height="750" WindowStartupLocation="CenterScreen" SizeToContent="Width" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid >
 
         <TextBlock HorizontalAlignment="Left" Text="Work Duration:" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <xctk:IntegerUpDown Name="iudWorkDuration"  HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top"  Width="60"/>
+        <xctk:IntegerUpDown Name="iudWorkDuration"  HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top"  Width="60" />
         <TextBlock HorizontalAlignment="Left" Text="Tray Icon Color :" Margin="10,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <xctk:ColorPicker Name="cpTrayIcon" HorizontalAlignment="Right" Margin="0,35,10,0" VerticalAlignment="Top"  Width="60"/>
+        <xctk:ColorPicker Name="cpTrayIcon" HorizontalAlignment="Right" Margin="0,35,10,0" VerticalAlignment="Top"  Width="60" />
         
         <GroupBox Header="Breaks" Margin="10,70,10,0" VerticalAlignment="Top" >
             <Grid>
@@ -22,28 +22,28 @@
                             <GridViewColumn Header="" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox CommandParameter="{Binding}" IsChecked="{Binding isEnabled}" />
+                                        <CheckBox CommandParameter="{Binding}" IsChecked="{Binding enabled}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding strName}" BorderThickness="0"/>
+                                        <TextBox Text="{Binding name}" BorderThickness="0"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Start">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <xctk:DateTimeUpDown Value="{Binding dtStartTime}" Format="ShortTime" Kind="Local" CultureInfo="de-DE"/>
+                                        <xctk:DateTimeUpDown Value="{Binding starttime}" Format="ShortTime" Kind="Local" CultureInfo="de-DE" BorderThickness="0"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Duration">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <xctk:DateTimeUpDown Value="{Binding tsDuration}" Format="ShortTime" Kind="Local" CultureInfo="de-DE"/>
+                                        <xctk:DateTimeUpDown Value="{Binding durationasdt}" Format="ShortTime" Kind="Local" CultureInfo="de-DE" BorderThickness="0"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -69,21 +69,21 @@
                             <GridViewColumn Header="Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding strName}" BorderThickness="0"/>
+                                        <TextBox Text="{Binding name}" BorderThickness="0"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Threshold">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <xctk:IntegerUpDown Value="{Binding iValue}" Maximum="100" Minimum="0" />
+                                        <xctk:IntegerUpDown Value="{Binding value}" Maximum="100" Minimum="0" BorderThickness="0" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Color">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <xctk:ColorPicker SelectedColor="{Binding color}"  Width="50"/>
+                                        <xctk:ColorPicker SelectedColor="{Binding color}"  Width="50" BorderThickness="0"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -102,8 +102,7 @@
 
             </Grid>
         </GroupBox>
-
-
+        
         <GroupBox Header="Subtitles" Margin="10,470,10,0" VerticalAlignment="Top" >
             <Grid>
                 <ListView Height="120" Margin="10,10,10,40" Name="lvSubtitles" VerticalAlignment="Top" BorderThickness="1" >
@@ -112,21 +111,21 @@
                             <GridViewColumn Header="Start">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <xctk:IntegerUpDown Value="{Binding iRangeStart}" Maximum="100" Minimum="0" />
+                                        <xctk:IntegerUpDown Value="{Binding rangestart}" Maximum="100" Minimum="0" BorderThickness="0" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="End">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <xctk:IntegerUpDown Value="{Binding iRangeEnd}" Maximum="100" Minimum="0" />
+                                        <xctk:IntegerUpDown Value="{Binding rangeend}" Maximum="100" Minimum="0" BorderThickness="0" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Subtitle">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding strSubtitle}" BorderThickness="0" />
+                                        <TextBox Text="{Binding subtitle}" BorderThickness="0"  />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -145,6 +144,7 @@
         </GroupBox>
         <Button Name="buttonSave"  Content="Save" HorizontalAlignment="Right" Margin="0,0,75,10" VerticalAlignment="Bottom" Width="55" Click="buttonSave_OnClick"/>
         <Button Name="buttonCancel"  Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="55" Click="buttonCancel_OnClick"/>
+        <Button Name="buttonExport"  Content="Export" HorizontalAlignment="Left" Margin="10,0,150,10" VerticalAlignment="Bottom" Width="55" Click="buttonExport_OnClick"/>
 
 
 

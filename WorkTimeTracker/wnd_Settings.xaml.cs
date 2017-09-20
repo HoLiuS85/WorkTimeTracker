@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WorkTimeTracker
 {
@@ -48,6 +40,7 @@ namespace WorkTimeTracker
             lvThresholds.ItemsSource = lThreshold;
         }
 
+        #region UI Event Handler
         private void buttonItemDelete_OnClick(object sender, RoutedEventArgs e)
         {
             Button b = sender as Button;
@@ -67,22 +60,20 @@ namespace WorkTimeTracker
             Button b = sender as Button;
 
             if (b.Tag.ToString() == "break")
-                lBreak.Add(new Break(true, DateTime.Now, TimeSpan.Zero, String.Empty));
+                lBreak.Add(new Break(String.Empty, true, TimeSpan.Zero, DateTime.Now));
 
             if (b.Tag.ToString() == "subtitle")
                 lSubtitle.Add(new Subtitle(0,0,String.Empty));
 
             if (b.Tag.ToString() == "threshold")
                 lThreshold.Add(new Threshold(Colors.Transparent, 0, String.Empty));
-
-
         }
 
         private void buttonCancel_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
         }
-
+        
         private void buttonSave_OnClick(object sender, RoutedEventArgs e)
         {
             UserData.setWorkDuration(iWorkDuration);
@@ -93,5 +84,14 @@ namespace WorkTimeTracker
 
             Close();
         }
+
+        private void buttonExport_OnClick(object sender, RoutedEventArgs e)
+        {
+            UserData.ConfigToXML(@"C:\temp\test.xml");
+
+            Close();
+        }
+
+        #endregion
     }
 }

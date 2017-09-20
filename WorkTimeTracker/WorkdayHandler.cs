@@ -14,8 +14,8 @@ namespace WorkTimeTracker
 			DateTime now = DateTime.Now;
 			foreach (Break lBreak in UserData.getBreaks())
 			{
-				if ((!lBreak.isEnabled || !(DateTime.Now.TimeOfDay > lBreak.dtStartTime.TimeOfDay) || !(UserData.getWorkTimeStart().TimeOfDay < lBreak.dtStartTime.TimeOfDay) ? false : UserData.getWorkTimeEnd().TimeOfDay > lBreak.dtStartTime.TimeOfDay))
-					now = now.Subtract(lBreak.tsDuration);
+				if ((!lBreak.enabled || !(DateTime.Now.TimeOfDay > lBreak.starttime.TimeOfDay) || !(UserData.getWorkTimeStart().TimeOfDay < lBreak.starttime.TimeOfDay) ? false : UserData.getWorkTimeEnd().TimeOfDay > lBreak.starttime.TimeOfDay))
+					now = now.Subtract(lBreak.duration);
 			}
 			return now - UserData.getWorkTimeStart();
 		}
@@ -25,8 +25,8 @@ namespace WorkTimeTracker
 			DateTime dateTime = UserData.getWorkTimeStart().AddMinutes((double)UserData.getWorkDuration());
 			foreach (Break lBreak in UserData.getBreaks())
 			{
-				if ((!lBreak.isEnabled || !(UserData.getWorkTimeStart().TimeOfDay < lBreak.dtStartTime.TimeOfDay) ? false : dateTime.TimeOfDay >= lBreak.dtStartTime.TimeOfDay))
-					dateTime = dateTime.Add(lBreak.tsDuration);
+				if ((!lBreak.enabled || !(UserData.getWorkTimeStart().TimeOfDay < lBreak.starttime.TimeOfDay) ? false : dateTime.TimeOfDay >= lBreak.starttime.TimeOfDay))
+					dateTime = dateTime.Add(lBreak.duration);
 			}
 			return dateTime;
 		}
@@ -38,36 +38,22 @@ namespace WorkTimeTracker
             UserData.setWorkTimeRemaining(UserData.getWorkTimeEnd() - DateTime.Now);
         }
 
-		public static bool getIsStarted()
-		{
-			foreach (Day lDay in UserData.getDays())
-			{
-				if (lDay.dtEndTime == DateTime.MinValue)
-					return true;
-			}
-			return false;
-		}
+        public static bool getIsStarted()
+        {
+            if (UserData.getWorkTimeStart().Equals(DateTime.MinValue))
+                return false;
+            else
+                return true;
+        }
 
         public static void WorkdayCalculationStop()
         {
             if (tWorkTime != null)
             {
-                if (!tWorkTime.Enabled.Equals(true))
+                if (tWorkTime.Enabled.Equals(true))
                     tWorkTime.Stop();
             }
         }
-
-		public static void WorkdayEnd(DateTime EndTime)
-		{
-            List<Day> lTemp = UserData.getDays();
-            lTemp.LastOrDefault().dtEndTime = EndTime;
-            UserData.setDays(lTemp);
-            UserData.setWorkTimeStart(DateTime.MinValue);
-            UserData.setWorkTimeEnd(DateTime.MinValue);
-            UserData.setWorkTimeRemaining(TimeSpan.Zero);
-            UserData.setWorkTimeElapsed(TimeSpan.Zero);
-            WorkdayCalculationStop();
-		}
 
         public static int getPercent()
         {
@@ -87,13 +73,6 @@ namespace WorkTimeTracker
             UserData.setWorkDuration(WorkingMinutes);
             UserData.setWorkTimeStart(StartTime);
 
-            if (!getIsStarted())
-            {
-                List<Day> lTemp = UserData.getDays();
-                lTemp.Add(new Day(UserData.getDays().Count, StartTime, DateTime.MinValue));
-                UserData.setDays(lTemp);
-            }
-
             if (tWorkTime == null)
             {
                 tWorkTime = new Timer(UserData.getInterval());
@@ -107,5 +86,23 @@ namespace WorkTimeTracker
                 tWorkTime.Start();
             }
         }
+
+        public static void WorkdayEnd(DateTime EndTime)
+        {
+            //Stop the calculation of Worktime Data
+            WorkdayCalculationStop();
+
+            //Store the ended workday in the workday history
+            List<Day> lTemp = UserData.getDays();
+            lTemp.Add(new Day(UserData.getWorkTimeStart(), EndTime));
+            UserData.setDays(lTemp);
+
+            //Set all workday related parameters to Zero
+            UserData.setWorkTimeStart(DateTime.MinValue);
+            UserData.setWorkTimeEnd(DateTime.MinValue);
+            UserData.setWorkTimeRemaining(TimeSpan.Zero);
+            UserData.setWorkTimeElapsed(TimeSpan.Zero);
+        }
+
     }
 }
