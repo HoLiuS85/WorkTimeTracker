@@ -22,20 +22,16 @@ namespace WorkTimeTracker
         // Get a color corresponding to workday progress by percent
         public static Colour getProgressColor(int percent)
         {
-            Threshold thresholdBad = UserData.getThresholds().Find((Threshold item) => item.name == "bad");
-            Threshold thresholdMedium = UserData.getThresholds().Find((Threshold item) => item.name == "medium");
-            Threshold thresholdGood = UserData.getThresholds().Find((Threshold item) => item.name == "good");
+            int previous = 0;
+            foreach (Threshold threshold in UserData.getThresholds())
+            {
+                if (percent >= previous && percent <= threshold.value)
+                    return threshold.colour;
 
-            if (percent < thresholdMedium.value)
-                return thresholdBad.colour;
-
-            if (percent > thresholdMedium.value && percent < thresholdGood.value)
-                return thresholdMedium.colour;
-
-            if (percent > thresholdGood.value)
-                return thresholdGood.colour;
-
-            return new Colour(Colors.LightGreen);
+                previous = threshold.value;
+            }
+            
+            return new Colour(Colors.Pink);
         }
 
         // Get Size/Resolution of the current screen
