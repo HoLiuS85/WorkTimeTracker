@@ -58,7 +58,7 @@ namespace WorkTimeTracker
         // Get tray icon that is created at runtime
         public static Icon getTrayIcon(Colour cHead, Colour cClock)
         {
-            Bitmap bmpResult = new Bitmap(152 , 152);
+            Bitmap bmpResult = new Bitmap(128 , 128);
 
             using (Bitmap bmpHead = changeBitmapColor(Properties.Resources.icon_head_128, cHead))
             {
