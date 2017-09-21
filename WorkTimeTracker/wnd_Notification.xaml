@@ -28,7 +28,7 @@
         <ProgressBar Name="progressbarWorktime" Height="20" Margin="10,0,10,10" Grid.Row="1"  VerticalAlignment="Bottom" Width="auto" Padding="0" />
         <!-- Footer Row-->
         <Rectangle Grid.Row="2" Fill="#FFF1F5FB" />
-        <TextBlock Name="labelWorkdayStartEnd" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,30" TextWrapping="Wrap" Text="Start a new Workday"  Grid.Row="2" Foreground="#FF0066CC" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseLeftButtonDown="labelStartEnd_OnMouseClick"/>
-        <TextBlock Name="labelWorkdayModify" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10" TextWrapping="Wrap" Text="Modify Workday"  Grid.Row="2" Foreground="#FF0066CC" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseLeftButtonDown="LabelModify_OnMouseClick"/>
+        <TextBlock Name="labelWorkdayStartEnd" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,30" TextWrapping="Wrap" Text="Start a new Workday"  Grid.Row="2" Foreground="#FF0066CC" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseLeftButtonUp="labelStartEnd_OnMouseClick"/>
+        <TextBlock Name="labelWorkdayModify" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10" TextWrapping="Wrap" Text="Modify Workday"  Grid.Row="2" Foreground="#FF0066CC" MouseEnter="Label_OnMouseEnter" MouseLeave="Label_OnMouseLeave" MouseLeftButtonUp="LabelModify_OnMouseClick"/>
     </Grid>
 </Window>
