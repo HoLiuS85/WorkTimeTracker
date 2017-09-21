@@ -97,5 +97,12 @@ namespace WorkTimeTracker
             }
             return bmpTemp;
         }
+
+        // convert argb string (WinForms) to media color (wpf)
+        public static System.Windows.Media.Color ColorFromArgb(int argb)
+        {
+            byte[] bytes = BitConverter.GetBytes(argb);
+            return System.Windows.Media.Color.FromArgb(bytes[3], bytes[2], bytes[1], bytes[0]);
+        }
     }
 }

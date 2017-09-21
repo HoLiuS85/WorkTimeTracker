@@ -32,7 +32,7 @@ namespace WorkTimeTracker
         private void WindowOpener(Window window)
         {
             //Reset the Openform Flag
-            Config.openForm = OpenForm.None;
+            UserData.setOpenWindow(OpenForm.None);
 
             window.SizeChanged += OnWindowSizeChanged;
             window.Closed += OnWindowClosed;
@@ -42,10 +42,10 @@ namespace WorkTimeTracker
 
         private void OnWindowClosed(object sender, EventArgs e)
         {
-            if (Config.openForm == OpenForm.StartModify)
+            if (UserData.getOpenWindow() == OpenForm.StartModify)
                 WindowOpener(new wnd_WorkdayStart());
 
-            if (Config.openForm == OpenForm.End)
+            if (UserData.getOpenWindow() == OpenForm.End)
                 WindowOpener(new wnd_WorkdayEnd());
         }
 

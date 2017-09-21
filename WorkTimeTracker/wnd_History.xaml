@@ -64,5 +64,9 @@
         </GroupBox>
         <Button Name="buttonSave"  Content="Save" HorizontalAlignment="Right" Margin="0,0,75,10" VerticalAlignment="Bottom" Width="55" Click="buttonSave_OnClick"/>
         <Button Name="buttonCancel"  Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="55" Click="buttonCancel_OnClick"/>
+        <Button Name="buttonExport"  Content="Export" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="55" Click="buttonExport_OnClick"/>
+        <Button Name="buttonImport"  Content="Import" HorizontalAlignment="Left" Margin="75,0,180,10" VerticalAlignment="Bottom" Width="55" Click="buttonImport_OnClick"/>
+
+
     </Grid>
 </Window>
