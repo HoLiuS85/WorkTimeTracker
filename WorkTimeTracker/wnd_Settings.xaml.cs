@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -76,22 +77,68 @@ namespace WorkTimeTracker
         
         private void buttonSave_OnClick(object sender, RoutedEventArgs e)
         {
-            UserData.setWorkDuration(iWorkDuration);
-            UserData.setTrayIconColor(cTrayIconColor);
+            UserData.setWorkDuration(iudWorkDuration.Value.Value);
+            UserData.setTrayIconColor(cpTrayIcon.SelectedColor.Value);
             UserData.setBreaks(lBreak.ToList());
             UserData.setSubtitles(lSubtitle.ToList());
             UserData.setThresholds(lThreshold.ToList());
 
             Close();
         }
+        
+        private void buttonImport_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog() { CheckFileExists = false, Filter = "XML Files (*.xml)|*.xml" };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    UserData.XMLToConfig(openFileDialog.FileName);
+                    Window_Loaded(null, new RoutedEventArgs());
+                }
+                catch
+                {
+                    MessageBox.Show("Error while importing of configuration failed: " + openFileDialog.FileName, "Import failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void buttonImportOld_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog() { CheckFileExists = false, Filter = "XML Files (*.xml)|*.xml" };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    UserData.OldXMLToConfig(openFileDialog.FileName);
+                    Window_Loaded(null, new RoutedEventArgs());
+                }
+                catch
+                {
+                    MessageBox.Show("Error while importing of configuration failed: " + openFileDialog.FileName, "Import failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
 
         private void buttonExport_OnClick(object sender, RoutedEventArgs e)
         {
-            UserData.ConfigToXML(@"C:\temp\test.xml");
+            SaveFileDialog saveFileDialog = new SaveFileDialog() { CheckFileExists = false, ValidateNames = true, Filter = "XML Files (*.xml)|*.xml", OverwritePrompt = true };
 
-            Close();
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    UserData.ConfigToXML(saveFileDialog.FileName);
+                    MessageBox.Show("Configuration successfully exported to: " + saveFileDialog.FileName,"Export successful",MessageBoxButton.OK,MessageBoxImage.Information);
+                }
+                catch
+                {
+                    MessageBox.Show("Error while exporting configuration to: " + saveFileDialog.FileName, "Export failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
-
         #endregion
     }
 }

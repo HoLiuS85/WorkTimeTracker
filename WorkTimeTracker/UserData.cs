@@ -10,6 +10,7 @@ namespace WorkTimeTracker
 {
     static class UserData
     {
+        private static OpenForm _ofWindow;
         private static Colour _cTrayIcon;
         private static Int32 _iInterval;
         private static Int32 _iWorkDuration;
@@ -22,6 +23,14 @@ namespace WorkTimeTracker
         private static List<Subtitle> _lSubtitles;
         private static List<Threshold> _lThresholds;
 
+        public static void setOpenWindow(OpenForm ofWindow)
+        {
+            _ofWindow = ofWindow;
+        }
+        public static OpenForm getOpenWindow()
+        {
+            return _ofWindow;
+        }
 
         public static void setTrayIconColor(Colour cTrayIcon)
         {
@@ -183,173 +192,227 @@ namespace WorkTimeTracker
             _lSubtitles = DeserializeObject(Properties.Settings.Default.listSubtitles) as List<Subtitle>;
         }
 
-        public static void ExportOldConfig()
+        public static void OldXMLToConfig(string filename)
         {
-            setTrayIconColor(Config.cHead);
-            setInterval(Config.iCalcInterval);
-            setWorkDuration(Config.iWorkDuration);
-            setWorkTimeEnd(Config.dtWorkEndTime);
-            setWorkTimeStart(Config.dtWorkStartTime);
-            setWorkTimeElapsed(Config.tsWorkTimeElapsed);
-            setWorkTimeRemaining(Config.tsWorkTimeRemaining);
-            setThresholds(Config.lThresholds);
-            setSubtitles(Config.lSubtitles);
-            setBreaks(Config.lBreaks);
-            setDays(Config.lDays);
-        }
+            List<Day> lDaysTemp = new List<Day>();
+            List<Break> lBreakTemp = new List<Break>();
+            List<Subtitle> lSubtitleTemp = new List<Subtitle>();
+            List<Threshold> lThresholdTemp = new List<Threshold>();
 
-        public static void ConfigToXML(string filename)
-        {
-            using (XmlWriter xmlWriter = XmlWriter.Create(filename, new XmlWriterSettings()
-            {
-                Indent = true,
-                IndentChars = "\t",
-                NewLineChars = "\r\n",
-                NewLineHandling = NewLineHandling.Replace
-            }))
-            {
-                xmlWriter.WriteStartDocument();
-                xmlWriter.WriteStartElement("worktimetracker");
-                xmlWriter.WriteAttributeString("interval", getInterval().ToString());
-                xmlWriter.WriteAttributeString("workduration", getWorkDuration().ToString());
-                xmlWriter.WriteAttributeString("headcolor", getTrayIconColor().ToString());
-                xmlWriter.WriteStartElement("breaks");
-                foreach (Break lBreak in getBreaks())
-                {
-                    xmlWriter.WriteStartElement("break");
-                    xmlWriter.WriteAttributeString("name", lBreak.name);
-                    xmlWriter.WriteAttributeString("enabled", lBreak.enabled.ToString());
-                    xmlWriter.WriteAttributeString("start", lBreak.starttime.ToBinary().ToString());
-                    xmlWriter.WriteAttributeString("duration", lBreak.duration.Ticks.ToString());
-                    xmlWriter.WriteEndElement();
-                }
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteStartElement("thresholds");
-                foreach (Threshold lThreshold in getThresholds())
-                {
-                    xmlWriter.WriteStartElement("threshold");
-                    xmlWriter.WriteAttributeString("name", lThreshold.name);
-                    xmlWriter.WriteAttributeString("value", lThreshold.value.ToString());
-                    xmlWriter.WriteAttributeString("color", lThreshold.colour.ToString());
-                    xmlWriter.WriteEndElement();
-                }
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteStartElement("phrases");
-                foreach (Subtitle lSubtitle in getSubtitles())
-                {
-                    xmlWriter.WriteStartElement("phrase");
-                    xmlWriter.WriteAttributeString("start", lSubtitle.rangestart.ToString());
-                    xmlWriter.WriteAttributeString("end", lSubtitle.rangeend.ToString());
-                    xmlWriter.WriteAttributeString("string", lSubtitle.subtitle);
-                    xmlWriter.WriteEndElement();
-                }
-                xmlWriter.WriteEndElement();
-                xmlWriter.WriteStartElement("history");
-                foreach (Day lDay in getDays())
-                {
-                    xmlWriter.WriteStartElement("day");
-                    xmlWriter.WriteAttributeString("start", lDay.starttime.ToBinary().ToString());
-                    xmlWriter.WriteAttributeString("end", lDay.endtime.ToBinary().ToString());
-                    xmlWriter.WriteEndElement();
-                }
-                xmlWriter.WriteEndElement();
-            }
-        }
-
-        public static void XMLToConfig(string filename)
-        {
-            XmlDocument xmlDocument = new XmlDocument() ;
+            XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(@filename);
 
             foreach (XmlNode childNode in xmlDocument.ChildNodes)
             {
                 if (childNode.Name.ToLower().Equals("worktimetracker"))
                 {
-                    setInterval(Convert.ToInt32(childNode.Attributes["interval"].Value));
-                    setWorkDuration(Convert.ToInt32(childNode.Attributes["workduration"].Value));
-                    setTrayIconColor((Color)ColorConverter.ConvertFromString(childNode.Attributes["headcolor"].Value));
-                    
-                    foreach (XmlNode xmlNodes in childNode.ChildNodes)
+                    setInterval(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["interval"].Value));
+                    setWorkDuration(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["workduration"].Value));
+                    setTrayIconColor(Helper.ColorFromArgb(Convert.ToInt32(childNode.Attributes["headcolor"].Value)));
+
+                    foreach (XmlNode breakNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/breaks"))
                     {
-                        string lower = xmlNodes.Name.ToLower();
-                        if (lower == "breaks")
-                        {
-                            List<Break> lTemp = new List<Break>();
+                        String name = breakNode.Attributes["name"].Value;
+                        Boolean enabled = Convert.ToBoolean(breakNode.Attributes["enabled"].Value);
+                        DateTime start = DateTime.FromBinary(Convert.ToInt64(breakNode.Attributes["start"].Value));
+                        TimeSpan duration = TimeSpan.FromTicks(Convert.ToInt64(breakNode.Attributes["duration"].Value));
 
-                            foreach (XmlNode childNode1 in xmlNodes.ChildNodes)
-                            {
-                                if (childNode1.Name.ToLower().Equals("break"))
-                                {
-                                    String name = childNode1.Attributes["name"].Value;
-                                    Boolean enabled = Convert.ToBoolean(childNode1.Attributes["enabled"].Value);
-                                    DateTime start = DateTime.FromBinary(Convert.ToInt64(childNode1.Attributes["start"].Value));
-                                    TimeSpan duration = TimeSpan.FromTicks(Convert.ToInt64(childNode1.Attributes["duration"].Value));
-
-                                    lTemp.Add(new Break(name, enabled, duration, start));
-                                }
-                            }
-
-                            setBreaks(lTemp);
-                        }
-                        else if (lower == "thresholds")
-                        {
-                            List<Threshold> lTemp = new List<Threshold>();
-
-                            foreach (XmlNode xmlNodes1 in xmlNodes.ChildNodes)
-                            {
-                                if (xmlNodes1.Name.ToLower().Equals("threshold"))
-                                {
-                                    String name = xmlNodes1.Attributes["name"].Value;
-                                    Int32 value = Convert.ToInt32(xmlNodes1.Attributes["value"].Value);
-                                    Color color = (Color)ColorConverter.ConvertFromString(childNode.Attributes["color"].Value);
-
-                                    lTemp.Add(new Threshold(color, value, name ));
-                                }
-                            }
-
-                            setThresholds(lTemp);
-                        }
-                        else if (lower == "history")
-                        {
-                            List<Day> lTemp = new List<Day>();
-
-                            foreach (XmlNode childNode2 in xmlNodes.ChildNodes)
-                            {
-                                if (childNode2.Name.ToLower().Equals("day"))
-                                {
-                                    DateTime start = DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["start"].Value));
-                                    DateTime end = DateTime.FromBinary(Convert.ToInt64(childNode2.Attributes["end"].Value));
-
-                                    lTemp.Add(new Day(start, end));
-                                }
-                            }
-
-                            setDays(lTemp);
-                        }
-                        else if (lower == "phrases")
-                        {
-                            List<Subtitle> lTemp = new List<Subtitle>();
-                            
-                            foreach (XmlNode xmlNodes2 in xmlNodes.ChildNodes)
-                            {
-                                if (xmlNodes2.Name.ToLower().Equals("phrase"))
-                                {
-                                    String subtitle = xmlNodes2.Attributes["string"].Value;
-                                    Int32 end = Convert.ToInt32(xmlNodes2.Attributes["end"].Value);
-                                    Int32 start = Convert.ToInt32(xmlNodes2.Attributes["start"].Value);
-
-                                    lTemp.Add(new Subtitle(start, end, subtitle));
-                                }
-                            }
-
-                            setSubtitles(lTemp);
-                        }
+                        lBreakTemp.Add(new Break(name, enabled, duration, start));
                     }
+                    setBreaks(lBreakTemp);
+
+                    foreach (XmlNode thresholdNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/thresholds"))
+                    {
+                        String name = thresholdNode.Attributes["name"].Value;
+                        Int32 value = Convert.ToInt32(thresholdNode.Attributes["value"].Value);
+                        Color color = Helper.ColorFromArgb(Convert.ToInt32(thresholdNode.Attributes["color"].Value));
+
+                        lThresholdTemp.Add(new Threshold(color, value, name));
+                    }
+                    setThresholds(lThresholdTemp);
+
+                    foreach (XmlNode historyNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/history"))
+                    {
+                        DateTime start = DateTime.FromBinary(Convert.ToInt64(historyNode.Attributes["start"].Value));
+                        DateTime end = DateTime.FromBinary(Convert.ToInt64(historyNode.Attributes["end"].Value));
+
+                        lDaysTemp.Add(new Day(start, end));
+                    }
+                    setDays(lDaysTemp);
+
+                    foreach (XmlNode phrasesNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/phrases"))
+                    {
+                        String subtitle = phrasesNode.Attributes["string"].Value;
+                        Int32 end = Convert.ToInt32(phrasesNode.Attributes["end"].Value);
+                        Int32 start = Convert.ToInt32(phrasesNode.Attributes["start"].Value);
+
+                        lSubtitleTemp.Add(new Subtitle(start, end, subtitle));
+                    }
+                    setSubtitles(lSubtitleTemp);
                 }
             }
+        }
+        
+        public static void ConfigToXML(string filename)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            try { xmlDocument.Load(@filename); }
+            catch { }
 
+            XmlElement worktimetrackerNode = xmlDocument.SelectSingleNode("/worktimetracker") as XmlElement;
+            if (worktimetrackerNode == null)
+            {
+                worktimetrackerNode = xmlDocument.CreateElement("worktimetracker");
+                xmlDocument.AppendChild(worktimetrackerNode);
+            }
 
+            XmlElement breaksNode = xmlDocument.SelectSingleNode("/worktimetracker/breaks") as XmlElement;
+            if (breaksNode == null)
+            {
+                breaksNode = xmlDocument.CreateElement("breaks");
+                worktimetrackerNode.AppendChild(breaksNode);
+            }
+            breaksNode.RemoveAll();
+
+            XmlElement phrasesNode = xmlDocument.SelectSingleNode("/worktimetracker/phrases") as XmlElement;
+            if (phrasesNode == null)
+            {
+                phrasesNode = xmlDocument.CreateElement("phrases");
+                worktimetrackerNode.AppendChild(phrasesNode);
+            }
+            phrasesNode.RemoveAll();
+
+            XmlElement thresholdsNode = xmlDocument.SelectSingleNode("/worktimetracker/thresholds") as XmlElement;
+            if (thresholdsNode == null)
+            {
+                thresholdsNode = xmlDocument.CreateElement("thresholds");
+                worktimetrackerNode.AppendChild(thresholdsNode);
+            }
+            thresholdsNode.RemoveAll();
+
+            foreach (Break lBreak in getBreaks())
+            {
+                XmlElement breakNode = xmlDocument.CreateElement("break");
+                breakNode.SetAttribute("name", lBreak.name);
+                breakNode.SetAttribute("enabled", lBreak.enabled.ToString());
+                breakNode.SetAttribute("start", lBreak.starttime.ToString());
+                breakNode.SetAttribute("duration", lBreak.duration.ToString());
+                breaksNode.AppendChild(breakNode);
+            }
+
+            foreach (Subtitle lSubtitle in getSubtitles())
+            {
+                XmlElement phraseNode = xmlDocument.CreateElement("phrase");
+                phraseNode.SetAttribute("start", lSubtitle.rangestart.ToString());
+                phraseNode.SetAttribute("end", lSubtitle.rangeend.ToString());
+                phraseNode.SetAttribute("string", lSubtitle.subtitle);
+                phrasesNode.AppendChild(phraseNode);
+            }
+
+            foreach (Threshold lThreshold in getThresholds())
+            {
+                XmlElement thresholdNode = xmlDocument.CreateElement("threshold");
+                thresholdNode.SetAttribute("name", lThreshold.name);
+                thresholdNode.SetAttribute("value", lThreshold.value.ToString());
+                thresholdNode.SetAttribute("color", lThreshold.colour.ToString());
+                thresholdsNode.AppendChild(thresholdNode);
+            }
+
+            xmlDocument.Save(@filename);
         }
 
+        public static void XMLToConfig(string filename)
+        {
+            List<Break> lBreakTemp = new List<Break>();
+            List<Subtitle> lSubtitleTemp = new List<Subtitle>();
+            List<Threshold> lThresholdTemp = new List<Threshold>();
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(@filename);
+
+            setInterval(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["interval"].Value));
+            setWorkDuration(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["workduration"].Value));
+            setTrayIconColor((Color)ColorConverter.ConvertFromString(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["headcolor"].Value));
+
+            foreach (XmlNode breakNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/breaks"))
+            {
+                String name = breakNode.Attributes["name"].Value;
+                Boolean enabled = Convert.ToBoolean(breakNode.Attributes["enabled"].Value);
+                DateTime start = DateTime.Parse(breakNode.Attributes["start"].Value);
+                TimeSpan duration = TimeSpan.Parse(breakNode.Attributes["duration"].Value);
+
+                lBreakTemp.Add(new Break(name, enabled, duration, start));
+            }
+            setBreaks(lBreakTemp);
+
+            foreach (XmlNode thresholdNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/thresholds"))
+            {
+                String name = thresholdNode.Attributes["name"].Value;
+                Int32 value = Convert.ToInt32(thresholdNode.Attributes["value"].Value);
+                Color color = (Color)ColorConverter.ConvertFromString(thresholdNode.Attributes["color"].Value);
+
+                lThresholdTemp.Add(new Threshold(color, value, name));
+            }
+            setThresholds(lThresholdTemp);
+
+            foreach (XmlNode phrasesNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/phrases"))
+            {
+                String subtitle = phrasesNode.Attributes["string"].Value;
+                Int32 end = Convert.ToInt32(phrasesNode.Attributes["end"].Value);
+                Int32 start = Convert.ToInt32(phrasesNode.Attributes["start"].Value);
+
+                lSubtitleTemp.Add(new Subtitle(start, end, subtitle));
+            }
+            setSubtitles(lSubtitleTemp);
+        }
+
+        public static void HistoryToXML(string filename)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            try { xmlDocument.Load(@filename); }
+            catch { }
+
+            XmlElement worktimetrackerNode = xmlDocument.SelectSingleNode("/worktimetracker") as XmlElement;
+            if (worktimetrackerNode == null)
+            {
+               worktimetrackerNode = xmlDocument.CreateElement("worktimetracker");
+               xmlDocument.AppendChild(worktimetrackerNode);
+            }
+            
+            XmlElement historyNode = xmlDocument.SelectSingleNode("/worktimetracker/history") as XmlElement;
+            if (historyNode == null)
+            {
+                historyNode = xmlDocument.CreateElement("history");
+                worktimetrackerNode.AppendChild(historyNode);
+            }
+            historyNode.RemoveAll();
+
+            foreach (Day lDay in getDays())
+            {
+                XmlElement dayNode = xmlDocument.CreateElement("day");
+                dayNode.SetAttribute("start", lDay.starttime.ToString());
+                dayNode.SetAttribute("end", lDay.endtime.ToString());
+                historyNode.AppendChild(dayNode);
+            }
+
+            xmlDocument.Save(@filename);
+        }
+
+        public static void XMLToHistory(string filename)
+        {
+            List<Day> lDayTemp = new List<Day>();
+
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(@filename);
+
+            foreach (XmlNode historyNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/history"))
+            {
+                DateTime start = DateTime.Parse(historyNode.Attributes["start"].Value);
+                DateTime end = DateTime.Parse(historyNode.Attributes["end"].Value);
+
+                lDayTemp.Add(new Day(start, end));
+            }
+            setDays(lDayTemp);
+        }
     }
 }

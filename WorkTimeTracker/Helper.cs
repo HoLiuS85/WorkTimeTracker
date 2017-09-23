@@ -22,20 +22,16 @@ namespace WorkTimeTracker
         // Get a color corresponding to workday progress by percent
         public static Colour getProgressColor(int percent)
         {
-            Threshold thresholdBad = UserData.getThresholds().Find((Threshold item) => item.name == "bad");
-            Threshold thresholdMedium = UserData.getThresholds().Find((Threshold item) => item.name == "medium");
-            Threshold thresholdGood = UserData.getThresholds().Find((Threshold item) => item.name == "good");
+            int previous = 0;
+            foreach (Threshold threshold in UserData.getThresholds())
+            {
+                if (percent >= previous && percent <= threshold.value)
+                    return threshold.colour;
 
-            if (percent < thresholdMedium.value)
-                return thresholdBad.colour;
-
-            if (percent > thresholdMedium.value && percent < thresholdGood.value)
-                return thresholdMedium.colour;
-
-            if (percent > thresholdGood.value)
-                return thresholdGood.colour;
-
-            return new Colour(Colors.LightGreen);
+                previous = threshold.value;
+            }
+            
+            return new Colour(Colors.Pink);
         }
 
         // Get Size/Resolution of the current screen
@@ -62,7 +58,7 @@ namespace WorkTimeTracker
         // Get tray icon that is created at runtime
         public static Icon getTrayIcon(Colour cHead, Colour cClock)
         {
-            Bitmap bmpResult = new Bitmap(152 , 152);
+            Bitmap bmpResult = new Bitmap(128 , 128);
 
             using (Bitmap bmpHead = changeBitmapColor(Properties.Resources.icon_head_128, cHead))
             {
@@ -96,6 +92,13 @@ namespace WorkTimeTracker
                 }
             }
             return bmpTemp;
+        }
+
+        // convert argb string (WinForms) to media color (wpf)
+        public static System.Windows.Media.Color ColorFromArgb(int argb)
+        {
+            byte[] bytes = BitConverter.GetBytes(argb);
+            return System.Windows.Media.Color.FromArgb(bytes[3], bytes[2], bytes[1], bytes[0]);
         }
     }
 }

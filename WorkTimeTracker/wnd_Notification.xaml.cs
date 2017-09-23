@@ -64,16 +64,16 @@ namespace WorkTimeTracker
         private void labelStartEnd_OnMouseClick(object sender, MouseButtonEventArgs e)
         {
             if (!WorkdayHandler.getIsStarted())
-                Config.openForm = OpenForm.StartModify;
+                UserData.setOpenWindow(OpenForm.StartModify);
             else
-                Config.openForm = OpenForm.End;
+                UserData.setOpenWindow(OpenForm.End);
 
             Close();
         }
 
         private void LabelModify_OnMouseClick(object sender, MouseButtonEventArgs e)
         {
-            Config.openForm = OpenForm.StartModify;
+            UserData.setOpenWindow(OpenForm.StartModify);
 
             Close();
         }
