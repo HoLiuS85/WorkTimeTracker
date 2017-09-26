@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkTimeTracker"
         mc:Ignorable="d"
-        Title="wndNotification" MinWidth="150" WindowStyle="None" ShowInTaskbar="False" Topmost="True" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated" ResizeMode="NoResize">
+        Title="wndNotification" MinWidth="150" ShowInTaskbar="False" Topmost="True" Loaded="Window_Loaded" SizeToContent="WidthAndHeight" Deactivated="Window_OnDeactivated" WindowStyle="None">
     <Grid Name="grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

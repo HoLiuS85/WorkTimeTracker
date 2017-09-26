@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace WorkTimeTracker
@@ -112,39 +113,37 @@ namespace WorkTimeTracker
                 _endtime = value;
             }
         }
-        public DateTime overtime
+        public String overtime
         {
             get
             {
-                if (!_endtime.Equals(DateTime.MinValue))
+                try
                 {
-                    return worktime.Subtract(TimeSpan.FromMinutes(UserData.getWorkDuration()));
+                    //Convert to string to get "-" formatting right (TimeSpan requires stupidity)
+                    TimeSpan result = _endtime - (_starttime.AddMinutes(UserData.getWorkDuration()));
+
+                    return result.ToString((result < TimeSpan.Zero ? "\\-" : "' '") + "hh\\:mm");
                 }
-                else
-                {
-                    return DateTime.MinValue;
-                }
+                catch
+                { return TimeSpan.Zero.ToString(@"hh\:mm"); }
             }
         }
-        public DateTime worktime
+        public TimeSpan worktime
         {
             get
             {
-                if (!_endtime.Equals(DateTime.MinValue))
+                try
                 {
-                    DateTime dateTime = _endtime;
+                    DateTime endtime = _endtime;
                     foreach (Break lBreak in UserData.getBreaks())
                     {
-                        if ((!lBreak.enabled || !(_starttime.TimeOfDay < lBreak.starttime.TimeOfDay) ? false : _endtime.TimeOfDay > lBreak.starttime.TimeOfDay))
-                            dateTime = dateTime.Add(-lBreak.duration);
+                        if (lBreak.enabled && _starttime.TimeOfDay < lBreak.starttime.TimeOfDay && _endtime.TimeOfDay > lBreak.starttime.TimeOfDay)
+                            endtime = endtime.Add(-lBreak.duration);
                     }
-                    dateTime = dateTime.Add(new TimeSpan(_starttime.TimeOfDay.Hours, _starttime.TimeOfDay.Minutes, _starttime.TimeOfDay.Seconds));
-                    return dateTime;
+                    return endtime - _starttime;
                 }
-                else
-                {
-                    return DateTime.MinValue;
-                }
+                catch
+                { return TimeSpan.Zero; }
             }
         }
         #endregion

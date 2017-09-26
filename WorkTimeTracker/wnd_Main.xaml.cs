@@ -12,21 +12,26 @@ namespace WorkTimeTracker
     {
         public wndMain()
         {
-            
-          //Config.Import();
-          //UserData.ExportOldConfig();
-            
-            // read user settings
-            UserData.ReadConfig();
-            
-            if (WorkdayHandler.getIsStarted())
+            try
+            {
+                //Config.Import();
+                //UserData.ExportOldConfig();
+
+                // read user settings
+                UserData.ReadConfig();
+
+                if (WorkdayHandler.getIsStarted())
                     WorkdayHandler.WorkdayStart(UserData.getWorkDuration(), UserData.getWorkTimeStart());
-            
-            ui_NotifyIcon Icon = new ui_NotifyIcon();
-            Icon.trayIcon.Click += OnTrayClick;
-            Icon.trayIcon.ContextMenu.MenuItems["settings"].Click += OnSettingsClick;
-            Icon.trayIcon.ContextMenu.MenuItems["history"].Click += OnHistoryClick;
-            Icon.trayIcon.ContextMenu.MenuItems["exit"].Click += OnExitClick;
+
+                ui_NotifyIcon Icon = new ui_NotifyIcon();
+                Icon.trayIcon.Click += OnTrayClick;
+                Icon.trayIcon.ContextMenu.MenuItems["settings"].Click += OnSettingsClick;
+                Icon.trayIcon.ContextMenu.MenuItems["history"].Click += OnHistoryClick;
+                Icon.trayIcon.ContextMenu.MenuItems["exit"].Click += OnExitClick;
+            }
+            catch (Exception e) { MessageBox.Show(e.Source + "-----" + e.Message + "-------"+e.StackTrace+"-----------" + e.Data);
+                Application.Current.Shutdown(1);
+            }
         }
 
         private void WindowOpener(Window window)

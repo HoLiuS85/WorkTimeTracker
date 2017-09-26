@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace WorkTimeTracker
@@ -19,7 +20,7 @@ namespace WorkTimeTracker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Aero.enable(5, this);
-                        
+
             labelHeaderSubtitle.Text = Helper.getSubtitle(WorkdayHandler.getPercent());
             labelRemainingTime.Text = UserData.getWorkTimeRemaining().ToString("hh\\:mm");
             labelRemainingText.Text = UserData.getWorkTimeRemaining() < TimeSpan.Zero ? "Overtime:" : "Remaining Time";

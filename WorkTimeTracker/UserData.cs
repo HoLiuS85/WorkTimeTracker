@@ -73,7 +73,10 @@ namespace WorkTimeTracker
         }
         public static DateTime getWorkTimeEnd()
         {
-            return _dtWorkEndTime;
+            if (_dtWorkEndTime != null)
+                return _dtWorkEndTime;
+            else
+                return DateTime.MinValue;
         }
 
         public static void setWorkTimeStart(DateTime dtWorkStartTime)
@@ -84,7 +87,10 @@ namespace WorkTimeTracker
         }
         public static DateTime getWorkTimeStart()
         {
-            return _dtWorkStartTime;
+            if (_dtWorkEndTime != null)
+                return _dtWorkStartTime;
+            else
+                return DateTime.MinValue;
         }
 
         public static void setWorkTimeElapsed(TimeSpan tsWorkTimeElapsed)
@@ -289,6 +295,10 @@ namespace WorkTimeTracker
                 worktimetrackerNode.AppendChild(thresholdsNode);
             }
             thresholdsNode.RemoveAll();
+            
+            worktimetrackerNode.SetAttribute("interval", getInterval().ToString());
+            worktimetrackerNode.SetAttribute("workduration", getWorkDuration().ToString());
+            worktimetrackerNode.SetAttribute("headcolor", getTrayIconColor().ToString());
 
             foreach (Break lBreak in getBreaks())
             {

@@ -123,10 +123,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="res\icon_clock_128.png" />
-    <Resource Include="res\icon_head_128.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="wnd_History.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -154,7 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\logo_hourglass.png" />
-    <Content Include="res\Xceed.Wpf.Toolkit.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

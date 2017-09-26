@@ -93,5 +93,10 @@ namespace WorkTimeTracker
             Close();
         }
         #endregion
+
+        private void listview_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            lvDays.Items.Refresh();
+        }
     }
 }
