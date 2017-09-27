@@ -27,6 +27,7 @@ namespace WorkTimeTracker
             labelElapsedTime.Text = UserData.getWorkTimeElapsed().ToString("hh\\:mm");
             labelEndTime.Text = UserData.getWorkTimeEnd().ToShortTimeString();
             labelStartTime.Text = UserData.getWorkTimeStart().ToShortTimeString();
+            labelPercentage.Text = WorkdayHandler.getPercent().ToString() + "%";
             progressbarWorktime.Value = WorkdayHandler.getPercent();
             progressbarWorktime.Foreground = new SolidColorBrush(Helper.getProgressColor(WorkdayHandler.getPercent()));
 
