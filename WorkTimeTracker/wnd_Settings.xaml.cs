@@ -104,24 +104,6 @@ namespace WorkTimeTracker
             }
         }
 
-        private void buttonImportOld_OnClick(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog() { CheckFileExists = false, Filter = "XML Files (*.xml)|*.xml" };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    UserData.OldXMLToConfig(openFileDialog.FileName);
-                    Window_Loaded(null, new RoutedEventArgs());
-                }
-                catch
-                {
-                    MessageBox.Show("Error while importing of configuration failed: " + openFileDialog.FileName, "Import failed", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
         private void buttonExport_OnClick(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog() { CheckFileExists = false, ValidateNames = true, Filter = "XML Files (*.xml)|*.xml" };

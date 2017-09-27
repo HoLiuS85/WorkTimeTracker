@@ -197,68 +197,7 @@ namespace WorkTimeTracker
             _lThresholds = DeserializeObject(Properties.Settings.Default.listThresholds) as List<Threshold>;
             _lSubtitles = DeserializeObject(Properties.Settings.Default.listSubtitles) as List<Subtitle>;
         }
-
-        public static void OldXMLToConfig(string filename)
-        {
-            List<Day> lDaysTemp = new List<Day>();
-            List<Break> lBreakTemp = new List<Break>();
-            List<Subtitle> lSubtitleTemp = new List<Subtitle>();
-            List<Threshold> lThresholdTemp = new List<Threshold>();
-
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(@filename);
-
-            foreach (XmlNode childNode in xmlDocument.ChildNodes)
-            {
-                if (childNode.Name.ToLower().Equals("worktimetracker"))
-                {
-                    setInterval(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["interval"].Value));
-                    setWorkDuration(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["workduration"].Value));
-                    setTrayIconColor(Helper.ColorFromArgb(Convert.ToInt32(childNode.Attributes["headcolor"].Value)));
-
-                    foreach (XmlNode breakNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/breaks"))
-                    {
-                        String name = breakNode.Attributes["name"].Value;
-                        Boolean enabled = Convert.ToBoolean(breakNode.Attributes["enabled"].Value);
-                        DateTime start = DateTime.FromBinary(Convert.ToInt64(breakNode.Attributes["start"].Value));
-                        TimeSpan duration = TimeSpan.FromTicks(Convert.ToInt64(breakNode.Attributes["duration"].Value));
-
-                        lBreakTemp.Add(new Break(name, enabled, duration, start));
-                    }
-                    setBreaks(lBreakTemp);
-
-                    foreach (XmlNode thresholdNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/thresholds"))
-                    {
-                        String name = thresholdNode.Attributes["name"].Value;
-                        Int32 value = Convert.ToInt32(thresholdNode.Attributes["value"].Value);
-                        Color color = Helper.ColorFromArgb(Convert.ToInt32(thresholdNode.Attributes["color"].Value));
-
-                        lThresholdTemp.Add(new Threshold(color, value, name));
-                    }
-                    setThresholds(lThresholdTemp);
-
-                    foreach (XmlNode historyNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/history"))
-                    {
-                        DateTime start = DateTime.FromBinary(Convert.ToInt64(historyNode.Attributes["start"].Value));
-                        DateTime end = DateTime.FromBinary(Convert.ToInt64(historyNode.Attributes["end"].Value));
-
-                        lDaysTemp.Add(new Day(start, end));
-                    }
-                    setDays(lDaysTemp);
-
-                    foreach (XmlNode phrasesNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/phrases"))
-                    {
-                        String subtitle = phrasesNode.Attributes["string"].Value;
-                        Int32 end = Convert.ToInt32(phrasesNode.Attributes["end"].Value);
-                        Int32 start = Convert.ToInt32(phrasesNode.Attributes["start"].Value);
-
-                        lSubtitleTemp.Add(new Subtitle(start, end, subtitle));
-                    }
-                    setSubtitles(lSubtitleTemp);
-                }
-            }
-        }
-        
+    
         public static void ConfigToXML(string filename)
         {
             XmlDocument xmlDocument = new XmlDocument();
@@ -333,6 +272,7 @@ namespace WorkTimeTracker
 
         public static void XMLToConfig(string filename)
         {
+            Boolean bIsNewFormat = true;
             List<Break> lBreakTemp = new List<Break>();
             List<Subtitle> lSubtitleTemp = new List<Subtitle>();
             List<Threshold> lThresholdTemp = new List<Threshold>();
@@ -340,16 +280,33 @@ namespace WorkTimeTracker
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(@filename);
 
+            try { ColorConverter.ConvertFromString(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["headcolor"].Value); }
+            catch { bIsNewFormat = false; }
+
             setInterval(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["interval"].Value));
             setWorkDuration(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["workduration"].Value));
-            setTrayIconColor((Color)ColorConverter.ConvertFromString(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["headcolor"].Value));
+
+            if (bIsNewFormat)
+                setTrayIconColor((Color)ColorConverter.ConvertFromString(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["headcolor"].Value));
+            else
+                setTrayIconColor(Helper.ColorFromArgb(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["headcolor"].Value)));
 
             foreach (XmlNode breakNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/breaks"))
             {
                 String name = breakNode.Attributes["name"].Value;
                 Boolean enabled = Convert.ToBoolean(breakNode.Attributes["enabled"].Value);
-                DateTime start = DateTime.Parse(breakNode.Attributes["start"].Value);
-                TimeSpan duration = TimeSpan.Parse(breakNode.Attributes["duration"].Value);
+                DateTime start;
+                TimeSpan duration;
+                if (bIsNewFormat)
+                {
+                    start = DateTime.Parse(breakNode.Attributes["start"].Value);
+                    duration = TimeSpan.Parse(breakNode.Attributes["duration"].Value);
+                }
+                else
+                {
+                    start = DateTime.FromBinary(Convert.ToInt64(breakNode.Attributes["start"].Value));
+                    duration = TimeSpan.FromTicks(Convert.ToInt64(breakNode.Attributes["duration"].Value));
+                }
 
                 lBreakTemp.Add(new Break(name, enabled, duration, start));
             }
@@ -359,7 +316,11 @@ namespace WorkTimeTracker
             {
                 String name = thresholdNode.Attributes["name"].Value;
                 Int32 value = Convert.ToInt32(thresholdNode.Attributes["value"].Value);
-                Color color = (Color)ColorConverter.ConvertFromString(thresholdNode.Attributes["color"].Value);
+                Color color;
+                if (bIsNewFormat)
+                    color = (Color)ColorConverter.ConvertFromString(thresholdNode.Attributes["color"].Value);
+                else
+                    color = Helper.ColorFromArgb(Convert.ToInt32(thresholdNode.Attributes["color"].Value));
 
                 lThresholdTemp.Add(new Threshold(color, value, name));
             }
