@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace WorkTimeTracker
 {
     static class Helper
     {
+        #region DLL Includes
         [DllImport("user32.dll", CharSet = CharSet.None, ExactSpelling = false)]
         private static extern bool DestroyIcon(IntPtr handle);
+
+        [DllImport("dwmapi.dll", CharSet = CharSet.None, ExactSpelling = false, PreserveSig = false)]
+        public static extern void DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
+
+        [DllImport("dwmapi.dll", CharSet = CharSet.None, ExactSpelling = false, PreserveSig = false)]
+        public static extern bool DwmIsCompositionEnabled();
+        #endregion
 
         // Get a random subtitle corresponding to workday progress by percent
         public static String getSubtitle(int percent)
@@ -107,6 +116,22 @@ namespace WorkTimeTracker
         {
             byte[] bytes = BitConverter.GetBytes(argb);
             return System.Windows.Media.Color.FromArgb(bytes[3], bytes[2], bytes[1], bytes[0]);
+        }
+
+        // Enables the Aero Glass Border effect for a Window
+        public static void EnableAeroBorder(int margins, Window window)
+        {
+            if (DwmIsCompositionEnabled())
+            {
+                MARGINS margin = new MARGINS()
+                {
+                    Top = margins,
+                    Left = margins,
+                    Bottom = margins,
+                    Right = margins
+                };
+                DwmExtendFrameIntoClientArea(new WindowInteropHelper(window).Handle, ref margin);
+            }
         }
     }
 }

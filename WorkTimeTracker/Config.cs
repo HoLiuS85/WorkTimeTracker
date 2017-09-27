@@ -5,6 +5,15 @@ using System.Windows.Media;
 namespace WorkTimeTracker
 {
     [Serializable]
+    public struct MARGINS
+    {
+        public int Left;
+        public int Right;
+        public int Top;
+        public int Bottom;
+    }
+
+    [Serializable]
     public class Break
     {
         #region Declaration

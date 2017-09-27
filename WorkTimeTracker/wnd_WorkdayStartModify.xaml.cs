@@ -16,7 +16,7 @@ namespace WorkTimeTracker
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Aero.enable(5, this);
+            Helper.EnableAeroBorder(5, this);
 
             if (!WorkdayHandler.getIsStarted())
             {
