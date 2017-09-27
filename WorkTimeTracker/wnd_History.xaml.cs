@@ -65,7 +65,7 @@ namespace WorkTimeTracker
 
         private void buttonExport_OnClick(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog() { CheckFileExists = false, ValidateNames = true, Filter = "XML Files (*.xml)|*.xml", OverwritePrompt = true };
+            SaveFileDialog saveFileDialog = new SaveFileDialog() { CheckFileExists = false, ValidateNames = true, Filter = "XML Files (*.xml)|*.xml" };
 
             if (saveFileDialog.ShowDialog() == true)
             {
