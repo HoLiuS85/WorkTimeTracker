@@ -85,7 +85,9 @@ namespace WorkTimeTracker
                     using (Graphics graphic = Graphics.FromImage(bmpResult))
                     {
                         graphic.DrawImage(bmpHead, 0, 0);
-                        graphic.DrawImage(bmpClock, 0, 0);
+
+                        if (cClock != Colors.Transparent)
+                            graphic.DrawImage(bmpClock, 0, 0);
                     }
                 }
             }
