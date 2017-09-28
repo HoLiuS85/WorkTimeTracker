@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -94,20 +95,21 @@ namespace WorkTimeTracker
             DestroyIcon(icoTemp.Handle);
             return icoResult;
         }
-        
+                
         // change non-transparent pixels of bitmap to color
         public static Bitmap changeBitmapColor(Bitmap bmpTemp, Colour targetColor)
-        {
-            for (int i = 0; i < bmpTemp.Width; i++)
-            {
-                for (int j = 0; j < bmpTemp.Height; j++)
-                {
-                    if (bmpTemp.GetPixel(i, j).A > 10)
-                    {
-                        bmpTemp.SetPixel(i, j, System.Drawing.Color.FromArgb(targetColor.A, targetColor.R, targetColor.G, targetColor.B));
-                    }
-                }
-            }
+        {            
+            ColorMap[] remapTable = {
+                new ColorMap {
+                    OldColor = System.Drawing.Color.Black,
+                    NewColor = System.Drawing.Color.FromArgb(targetColor.A, targetColor.R, targetColor.G, targetColor.B) } };
+
+            ImageAttributes imageAttributes = new ImageAttributes();                        
+            imageAttributes.SetRemapTable(remapTable, ColorAdjustType.Bitmap);
+
+            using (Graphics g = Graphics.FromImage(bmpTemp))
+                g.DrawImage(bmpTemp, new Rectangle(0, 0, bmpTemp.Width, bmpTemp.Height), 0, 0, bmpTemp.Width, bmpTemp.Height, GraphicsUnit.Pixel, imageAttributes);
+            
             return bmpTemp;
         }
 

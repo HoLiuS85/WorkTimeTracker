@@ -75,13 +75,13 @@ namespace WorkTimeTracker
 
             if (tWorkTime == null)
             {
-                tWorkTime = new Timer(UserData.getInterval());
+                tWorkTime = new Timer(10000);
                 tWorkTime.Elapsed += TWorkTime_Elapsed;
                 tWorkTime.Start();
             }
             else if (tWorkTime.Enabled.Equals(false))
             {
-                tWorkTime = new Timer(UserData.getInterval());
+                tWorkTime = new Timer(10000);
                 tWorkTime.Elapsed += TWorkTime_Elapsed;
                 tWorkTime.Start();
             }
