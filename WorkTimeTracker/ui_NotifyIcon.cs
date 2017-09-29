@@ -40,8 +40,6 @@ namespace WorkTimeTracker
             }
             else
             {
-                trayIcon.Icon = Helper.getTrayIcon(UserData.getTrayIconColor(), Helper.getProgressColor(WorkdayHandler.getPercent()));
-
                 if (WorkdayHandler.getPercent() == 100)
                 {
                     if (bIcon)
@@ -54,6 +52,10 @@ namespace WorkTimeTracker
                         trayIcon.Icon = Helper.getTrayIcon(Helper.getProgressColor(WorkdayHandler.getPercent()), UserData.getTrayIconColor());
                         bIcon = true;
                     }
+                }
+                else
+                {
+                    trayIcon.Icon = Helper.getTrayIcon(UserData.getTrayIconColor(), Helper.getProgressColor(WorkdayHandler.getPercent()));
                 }
             }
 
