@@ -70,16 +70,15 @@ namespace WorkTimeTracker
 
         public static void WorkdayStart(int WorkingMinutes, DateTime StartTime)
         {
+            //Store parameters of the newly started workday
             UserData.setWorkDuration(WorkingMinutes);
             UserData.setWorkTimeStart(StartTime);
 
-            if (tWorkTime == null)
-            {
-                tWorkTime = new Timer(10000);
-                tWorkTime.Elapsed += TWorkTime_Elapsed;
-                tWorkTime.Start();
-            }
-            else if (tWorkTime.Enabled.Equals(false))
+            //Calculate the workday parameters intially to avoid delays
+            TWorkTime_Elapsed(new object(), new EventArgs() as ElapsedEventArgs );
+            
+            //Initialize and start a new timer for workday calulation
+            if (tWorkTime == null || tWorkTime?.Enabled == false)
             {
                 tWorkTime = new Timer(10000);
                 tWorkTime.Elapsed += TWorkTime_Elapsed;
