@@ -129,7 +129,7 @@ namespace WorkTimeTracker
                 try
                 {
                     //Convert to string to get "-" formatting right (TimeSpan requires stupidity)
-                    TimeSpan result = _endtime - (_starttime.AddMinutes(UserData.getWorkDuration()));
+                    TimeSpan result = TimeSpan.FromMinutes(worktime.TotalMinutes - UserData.getWorkDuration());
 
                     return result.ToString((result < TimeSpan.Zero ? "\\-" : "' '") + "hh\\:mm");
                 }
@@ -147,7 +147,7 @@ namespace WorkTimeTracker
                     foreach (Break lBreak in UserData.getBreaks())
                     {
                         if (lBreak.enabled && _starttime.TimeOfDay < lBreak.starttime.TimeOfDay && _endtime.TimeOfDay > lBreak.starttime.TimeOfDay)
-                            endtime = endtime.Add(-lBreak.duration);
+                            endtime = endtime.Subtract(lBreak.duration);
                     }
                     return endtime - _starttime;
                 }

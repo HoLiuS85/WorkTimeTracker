@@ -38,14 +38,14 @@
                             <GridViewColumn Header="Worktime">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding worktime , StringFormat=hh\\:mm}"  />
+                                        <TextBlock Text="{Binding worktime , StringFormat=hh\\:mm}" Foreground="Black" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Overtime" >
                                 <GridViewColumn.CellTemplate >
                                     <DataTemplate >
-                                        <TextBlock Text="{Binding overtime}" />
+                                        <TextBlock Text="{Binding overtime}" Foreground="Black" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
