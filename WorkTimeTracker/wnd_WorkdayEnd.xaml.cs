@@ -38,6 +38,7 @@ namespace WorkTimeTracker
 
         private void buttonSave_OnClick(object sender, RoutedEventArgs e)
         {
+            //End the current workday using the start day and todays time 
             WorkdayHandler.WorkdayEnd(
                 new DateTime(
                     UserData.getWorkTimeStart().Year,
