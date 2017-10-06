@@ -11,7 +11,7 @@
         <TextBlock Name="labelHeaderTitle" HorizontalAlignment="Left" Margin="5,5,0,0" TextWrapping="Wrap" Text="End current Workday" VerticalAlignment="Top" FontWeight="Bold"/>
         <TextBlock Name="labelEndText" HorizontalAlignment="Left" Margin="10,30,0,0" TextWrapping="Wrap" Text="End time:" VerticalAlignment="Top" />
         <xctk1:DateTimeUpDown Name="pickerEndtime" HorizontalAlignment="Right" Margin="0,30,10,10" VerticalAlignment="Top" Format="ShortTime" Value="01/01/0001 13:01:00" Kind="Local" CultureInfo="de-DE" HorizontalContentAlignment="Center"/>
-        <Button Name="buttonCancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,60,10,10" VerticalAlignment="Top" Width="55" Click="buttonCancel_OnClick"/>
-        <Button Name="buttonSave"  Content="Save" HorizontalAlignment="Right" Margin="10,60,75,0" VerticalAlignment="Top" Width="55" Click="buttonSave_OnClick"/>
+        <Button Name="buttonCancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,60,10,10" VerticalAlignment="Top" Width="55" Click="buttonCancel_OnClick" IsCancel="True"/>
+        <Button Name="buttonSave"  Content="Save" HorizontalAlignment="Right" Margin="10,60,75,0" VerticalAlignment="Top" Width="55" Click="buttonSave_OnClick" IsDefault="True"/>
     </Grid>
 </Window>

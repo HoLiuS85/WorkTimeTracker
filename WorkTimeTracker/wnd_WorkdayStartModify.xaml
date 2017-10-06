@@ -13,7 +13,7 @@
         <xctk1:DateTimeUpDown Name="pickerStartTime" HorizontalAlignment="Right" Margin="0,30,10,10" VerticalAlignment="Top" Format="ShortTime" Value="01/01/0001 13:01:00" Kind="Local" CultureInfo="de-DE" MinWidth="55" />
         <xctk1:IntegerUpDown Name="pickerWorkDuration" HorizontalAlignment="Right" Margin="0,55,10,0" VerticalAlignment="Top" Value="0" MinWidth="55" />
         <TextBlock Name="labelDurationText" HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" Text="Duration:" VerticalAlignment="Top" />
-        <Button Name="buttonCancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,85,10,10" VerticalAlignment="Top" Width="55" Click="buttonCancel_Click"/>
-        <Button Name="buttonSave"  Content="Save" HorizontalAlignment="Right" Margin="10,85,75,0" VerticalAlignment="Top" Width="55" Click="buttonSave_Click"/>
+        <Button Name="buttonCancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,85,10,10" VerticalAlignment="Top" Width="55" Click="buttonCancel_Click" IsCancel="True"/>
+        <Button Name="buttonSave"  Content="Save" HorizontalAlignment="Right" Margin="10,85,75,0" VerticalAlignment="Top" Width="55" Click="buttonSave_Click" IsDefault="True"/>
     </Grid>
 </Window>
