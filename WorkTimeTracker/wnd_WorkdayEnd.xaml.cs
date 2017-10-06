@@ -38,7 +38,14 @@ namespace WorkTimeTracker
 
         private void buttonSave_OnClick(object sender, RoutedEventArgs e)
         {
-            WorkdayHandler.WorkdayEnd(pickerEndtime.Value.Value);
+            WorkdayHandler.WorkdayEnd(
+                new DateTime(
+                    UserData.getWorkTimeStart().Year,
+                    UserData.getWorkTimeStart().Month,
+                    UserData.getWorkTimeStart().Day,
+                    pickerEndtime.Value.Value.Hour,
+                    pickerEndtime.Value.Value.Minute,
+                    pickerEndtime.Value.Value.Second));
             base.Close();
         }
         #endregion
