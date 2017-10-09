@@ -18,6 +18,8 @@ namespace WorkTimeTracker
                 //UserData.ExportOldConfig();
 
                 // read user settings
+                // ConfigHandler.Save();
+
                 UserData.ReadConfig();
 
                 if (WorkdayHandler.getIsStarted())

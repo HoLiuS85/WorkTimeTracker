@@ -35,8 +35,8 @@ namespace WorkTimeTracker
         public static void setTrayIconColor(Colour cTrayIcon)
         {
             _cTrayIcon = cTrayIcon;
-            Properties.Settings.Default.colorTrayIcon = SerializeObject(cTrayIcon);
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "colorTrayIcon").value = SerializeObject(cTrayIcon);
+            ConfigHandler.Save();
         }
         public static Colour getTrayIconColor()
         {
@@ -46,8 +46,8 @@ namespace WorkTimeTracker
         public static void setInterval(Int32 iInterval)
         {
             _iInterval = iInterval;
-            Properties.Settings.Default.intInterval = iInterval;
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "intInterval").value = iInterval.ToString();
+            ConfigHandler.Save();
         }
         public static Int32 getInterval()
         {
@@ -57,8 +57,8 @@ namespace WorkTimeTracker
         public static void setWorkDuration(Int32 iWorkDuration)
         {
             _iWorkDuration = iWorkDuration;
-            Properties.Settings.Default.intWorkDuration = iWorkDuration;
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "intWorkDuration").value = iWorkDuration.ToString();
+            ConfigHandler.Save();
         }
         public static Int32 getWorkDuration()
         {
@@ -68,8 +68,8 @@ namespace WorkTimeTracker
         public static void setWorkTimeEnd(DateTime dtWorkEndTime)
         {
             _dtWorkEndTime = dtWorkEndTime;
-            Properties.Settings.Default.dtWorkEndTime = dtWorkEndTime;
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "dtWorkEndTime").value = dtWorkEndTime.ToString();
+            ConfigHandler.Save();
         }
         public static DateTime getWorkTimeEnd()
         {
@@ -82,8 +82,8 @@ namespace WorkTimeTracker
         public static void setWorkTimeStart(DateTime dtWorkStartTime)
         {
             _dtWorkStartTime = dtWorkStartTime;
-            Properties.Settings.Default.dtWorkStartTime = dtWorkStartTime;
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "dtWorkStartTime").value = dtWorkStartTime.ToString();
+            ConfigHandler.Save();
         }
         public static DateTime getWorkTimeStart()
         {
@@ -96,8 +96,8 @@ namespace WorkTimeTracker
         public static void setWorkTimeElapsed(TimeSpan tsWorkTimeElapsed)
         {
             _tsWorkTimeElapsed = tsWorkTimeElapsed;
-            Properties.Settings.Default.tsWorkTimeElapsed = tsWorkTimeElapsed;
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeElapsed").value = tsWorkTimeElapsed.ToString();
+            ConfigHandler.Save();
         }
         public static TimeSpan getWorkTimeElapsed()
         {
@@ -107,8 +107,8 @@ namespace WorkTimeTracker
         public static void setWorkTimeRemaining(TimeSpan tsWorkTimeRemaining)
         {
             _tsWorkTimeRemaining = tsWorkTimeRemaining;
-            Properties.Settings.Default.tsWorkTimeRemaining = tsWorkTimeRemaining;
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeRemaining").value = tsWorkTimeRemaining.ToString();
+            ConfigHandler.Save();
         }
         public static TimeSpan getWorkTimeRemaining()
         {
@@ -118,8 +118,8 @@ namespace WorkTimeTracker
         public static void setDays(List<Day> lDays)
         {
             _lDays = lDays;
-            Properties.Settings.Default.listDays = SerializeObject(lDays);
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "listDays").value = SerializeObject(lDays);
+            ConfigHandler.Save();
         }
         public static List<Day> getDays()
         {
@@ -129,8 +129,8 @@ namespace WorkTimeTracker
         public static void setBreaks(List<Break> lBreaks)
         {
             _lBreaks = lBreaks;
-            Properties.Settings.Default.listBreaks = SerializeObject(lBreaks);
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "listBreaks").value = SerializeObject(lBreaks);
+            ConfigHandler.Save();
         }
         public static List<Break> getBreaks()
         {
@@ -140,8 +140,8 @@ namespace WorkTimeTracker
         public static void setSubtitles(List<Subtitle> lSubtitles)
         {
             _lSubtitles = lSubtitles;
-            Properties.Settings.Default.listSubtitles = SerializeObject(lSubtitles);
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "listSubtitles").value = SerializeObject(lSubtitles);
+            ConfigHandler.Save();
         }
         public static List<Subtitle> getSubtitles()
         {
@@ -151,8 +151,8 @@ namespace WorkTimeTracker
         public static void setThresholds(List<Threshold> lThresholds)
         {
             _lThresholds = lThresholds;
-            Properties.Settings.Default.listThresholds = SerializeObject(lThresholds);
-            Properties.Settings.Default.Save();
+            ConfigHandler.lConfValues.Find(x => x.name == "listThresholds").value = SerializeObject(lThresholds);
+            ConfigHandler.Save();
         }
         public static List<Threshold> getThresholds()
         {
@@ -185,17 +185,17 @@ namespace WorkTimeTracker
 
         public static void ReadConfig()
         {
-            _cTrayIcon = (Colour)DeserializeObject(Properties.Settings.Default.colorTrayIcon);
-            _iInterval = Properties.Settings.Default.intInterval;
-            _iWorkDuration = Properties.Settings.Default.intWorkDuration;
-            _dtWorkEndTime = Properties.Settings.Default.dtWorkEndTime;
-            _dtWorkStartTime = Properties.Settings.Default.dtWorkStartTime;
-            _tsWorkTimeElapsed = Properties.Settings.Default.tsWorkTimeElapsed;
-            _tsWorkTimeRemaining = Properties.Settings.Default.tsWorkTimeRemaining;
-            _lDays = DeserializeObject(Properties.Settings.Default.listDays) as List<Day>;
-            _lBreaks = DeserializeObject(Properties.Settings.Default.listBreaks) as List<Break>;
-            _lThresholds = DeserializeObject(Properties.Settings.Default.listThresholds) as List<Threshold>;
-            _lSubtitles = DeserializeObject(Properties.Settings.Default.listSubtitles) as List<Subtitle>;
+            _cTrayIcon = (Colour)DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "colorTrayIcon").value);
+            _iInterval = Convert.ToInt32(ConfigHandler.lConfValues.Find(x => x.name == "intInterval").value);
+            _iWorkDuration = Convert.ToInt32(ConfigHandler.lConfValues.Find(x => x.name == "intWorkDuration").value);
+            _dtWorkEndTime = DateTime.Parse(ConfigHandler.lConfValues.Find(x => x.name == "dtWorkEndTime").value);
+            _dtWorkStartTime = DateTime.Parse(ConfigHandler.lConfValues.Find(x => x.name == "dtWorkStartTime").value);
+            _tsWorkTimeElapsed = TimeSpan.Parse(ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeElapsed").value);
+            _tsWorkTimeRemaining = TimeSpan.Parse(ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeRemaining").value);
+            _lDays = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listDays").value) as List<Day>;
+            _lBreaks = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listBreaks").value) as List<Break>;
+            _lSubtitles = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listSubtitles").value) as List<Subtitle>;
+            _lThresholds = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listThresholds").value) as List<Threshold>;
         }
     
         public static void ConfigToXML(string filename)

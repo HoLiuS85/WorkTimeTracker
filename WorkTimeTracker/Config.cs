@@ -1,9 +1,82 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Windows.Media;
+using System.Xml;
 
 namespace WorkTimeTracker
 {
+    public static class ConfigHandler
+    {
+        private static String confFile = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + Path.DirectorySeparatorChar + Assembly.GetEntryAssembly().GetName().Name + ".xml";
+        public static List<ConfValue> lConfValues = new List<ConfValue>()
+        {
+            new ConfValue("listThresholds","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACGAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLlRocmVzaG9sZCwgV29ya1RpbWVUcmFja2VyLCBWZXJzaW9uPTEuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dAwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24EAAAbV29ya1RpbWVUcmFja2VyLlRocmVzaG9sZFtdAgAAAAgICQMAAAADAAAAAAAAAAcDAAAAAAEAAAADAAAABBlXb3JrVGltZVRyYWNrZXIuVGhyZXNob2xkAgAAAAkEAAAACQUAAAAJBgAAAAUEAAAAGVdvcmtUaW1lVHJhY2tlci5UaHJlc2hvbGQDAAAABV9uYW1lBl9jb2xvcgZfdmFsdWUBBAAWV29ya1RpbWVUcmFja2VyLkNvbG91cgIAAAAIAgAAAAYHAAAAA2JhZAX4////FldvcmtUaW1lVHJhY2tlci5Db2xvdXIEAAAAAUEBUgFHAUIAAAAAAgICAgIAAAD//wAAAAAAAAEFAAAABAAAAAYJAAAABm1lZGl1bQH2////+P//////gEAyAAAAAQYAAAAEAAAABgsAAAAEZ29vZAH0////+P////9BwRxQAAAACw=="),
+            new ConfValue("listBreaks","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACCAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLkJyZWFrLCBXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsXV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgQAABdXb3JrVGltZVRyYWNrZXIuQnJlYWtbXQIAAAAICAkDAAAAAwAAAAAAAAAHAwAAAAABAAAAAwAAAAQVV29ya1RpbWVUcmFja2VyLkJyZWFrAgAAAAkEAAAACQUAAAAJBgAAAAUEAAAAFVdvcmtUaW1lVHJhY2tlci5CcmVhawQAAAAFX25hbWUIX2VuYWJsZWQJX2R1cmF0aW9uCl9zdGFydHRpbWUBAAAAAQwNAgAAAAYHAAAACWJyZWFrZmFzdAEAGnEYAgAAAACQdCzQA9SIAQUAAAAEAAAABggAAAAFbHVuY2gBADTiMAQAAAAAyMFR6QPUiAEGAAAABAAAAAYJAAAABmRpbm5lcgEAGnEYAgAAAAA4XJwbBNSICw=="),
+            new ConfValue("listSubtitles","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACFAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLlN1YnRpdGxlLCBXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsXV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgQAABpXb3JrVGltZVRyYWNrZXIuU3VidGl0bGVbXQIAAAAICAkDAAAACQAAAAAAAAAHAwAAAAABAAAACQAAAAQYV29ya1RpbWVUcmFja2VyLlN1YnRpdGxlAgAAAAkEAAAACQUAAAAJBgAAAAkHAAAACQgAAAAJCQAAAAkKAAAACQsAAAAJDAAAAAUEAAAAGFdvcmtUaW1lVHJhY2tlci5TdWJ0aXRsZQMAAAALX3Jhbmdlc3RhcnQJX3JhbmdlZW5kCV9zdWJ0aXRsZQAAAQgIAgAAAAAAAAAKAAAABg0AAAATR29vZCBtb3JuaW5nLCBjdW50IQEFAAAABAAAAAAAAAAKAAAABg4AAAAQU3RpbGwgZHJ1bmssIGVoPwEGAAAABAAAAAoAAAAyAAAABg8AAAARWW91J3JlIGRvb21lZC4uLi4BBwAAAAQAAAAKAAAAMgAAAAYQAAAAEkV0ZXJuaXR5IGF3YWl0cy4uLgEIAAAABAAAADIAAABaAAAABhEAAAAZQmVlciBpcyBnZXR0aW5nIGNsb3Nlci4uLgEJAAAABAAAADIAAABaAAAABhIAAAAWSnV1dXVzdCBhIGJpdCBtb3JlIG5vdwEKAAAABAAAAFoAAABkAAAABhMAAAAJRU5EUFNVUlQhAQsAAAAEAAAAZAAAAGQAAAAGFAAAABFGdWNrIG9mZiBhbHJlYWR5IQEMAAAABAAAAGQAAABkAAAABhUAAAAPR2V0IGxvc3QsIGN1bnQhCw=="),
+            new ConfValue("listDays","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACAAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLkRheSwgV29ya1RpbWVUcmFja2VyLCBWZXJzaW9uPTEuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dAwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24EAAAVV29ya1RpbWVUcmFja2VyLkRheVtdAgAAAAgICQMAAAAAAAAAAAAAAAcDAAAAAAEAAAAAAAAABBNXb3JrVGltZVRyYWNrZXIuRGF5AgAAAAs="),
+            new ConfValue("intWorkDuration","456"),
+            new ConfValue("intInterval","1000"),
+            new ConfValue("dtWorkStartTime",DateTime.MinValue.ToString()),
+            new ConfValue("dtWorkEndTime",DateTime.MinValue.ToString()),
+            new ConfValue("tsWorkTimeRemaining","00:00:00"),
+            new ConfValue("tsWorkTimeElapsed","00:00:00"),
+            new ConfValue("colorTrayIcon","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBQEAAAAWV29ya1RpbWVUcmFja2VyLkNvbG91cgQAAAABQQFSAUcBQgAAAAACAgICAgAAAP////8L")
+        };
+
+        static ConfigHandler()
+        {
+            if (File.Exists(confFile))
+                Read();
+            else
+                Save();
+        }
+
+        public static void Save()
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            try { xmlDocument.Load(@confFile); }
+            catch { }
+
+            foreach (ConfValue cv in lConfValues)
+            {
+                XmlElement userconfigNode = xmlDocument.SelectSingleNode("/userconfig") as XmlElement;
+                if (userconfigNode == null)
+                {
+                    userconfigNode = xmlDocument.CreateElement("userconfig");
+                    xmlDocument.AppendChild(userconfigNode);
+                }
+
+                XmlElement valueNode = xmlDocument.SelectSingleNode("/userconfig/" + cv.name) as XmlElement;
+                if (valueNode == null)
+                {
+                    valueNode = xmlDocument.CreateElement(cv.name);
+                    userconfigNode.AppendChild(valueNode);
+                }
+                valueNode.RemoveAll();
+
+                valueNode.SetAttribute("value", cv.value);
+            }
+
+            xmlDocument.Save(@confFile);
+        }
+
+        public static void Read()
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(@confFile);
+
+            foreach (ConfValue cv in lConfValues)
+            {
+                String temp = xmlDocument.DocumentElement.SelectSingleNode("/userconfig/" + cv.name).Attributes["value"].Value;
+
+                if (temp != String.Empty)
+                    cv.value = temp;
+            }
+        }        
+    }
+
     [Serializable]
     public struct MARGINS
     {
@@ -11,6 +84,46 @@ namespace WorkTimeTracker
         public int Right;
         public int Top;
         public int Bottom;
+    }
+
+    [Serializable]
+    public class ConfValue
+    {
+        #region Declaration
+        private String _name;
+        private String _value;
+        #endregion
+
+        #region Getter/Setter
+        public String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+        public String value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                _value = value;
+            }
+        }
+        #endregion
+
+        public ConfValue(String name,String value)
+        {
+            _name = name;
+            _value = value;
+        }
     }
 
     [Serializable]
