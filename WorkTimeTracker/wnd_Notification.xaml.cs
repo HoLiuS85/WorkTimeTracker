@@ -21,15 +21,15 @@ namespace WorkTimeTracker
         {
             Helper.EnableAeroBorder(5, this);
 
-            labelHeaderSubtitle.Text = Helper.getSubtitle(WorkdayHandler.getPercent());
-            labelRemainingTime.Text = UserData.getWorkTimeRemaining().ToString("hh\\:mm");
-            labelRemainingText.Text = UserData.getWorkTimeRemaining() < TimeSpan.Zero ? "Overtime:" : "Remaining Time";
-            labelElapsedTime.Text = UserData.getWorkTimeElapsed().ToString("hh\\:mm");
-            labelEndTime.Text = UserData.getWorkTimeEnd().ToShortTimeString();
+            labelHeaderSubtitle.Text = Helper.getSubtitle(WorkdayHandler.getPercent(UserData.getWorkTimeStart()));
+            labelRemainingTime.Text = WorkdayHandler.getWorkTimeRemaining(UserData.getWorkTimeStart()).ToString("hh\\:mm");
+            labelRemainingText.Text = WorkdayHandler.getWorkTimeRemaining(UserData.getWorkTimeStart()) < TimeSpan.Zero ? "Overtime:" : "Remaining Time";
+            labelElapsedTime.Text = WorkdayHandler.getWorkTimeElapsed(UserData.getWorkTimeStart()).ToString("hh\\:mm");
+            labelEndTime.Text = WorkdayHandler.getWorkTimeEnd(UserData.getWorkTimeStart()).ToShortTimeString();
             labelStartTime.Text = UserData.getWorkTimeStart().ToShortTimeString();
-            labelPercentage.Text = WorkdayHandler.getPercent().ToString() + "%";
-            progressbarWorktime.Value = WorkdayHandler.getPercent();
-            progressbarWorktime.Foreground = new SolidColorBrush(Helper.getProgressColor(WorkdayHandler.getPercent()));
+            labelPercentage.Text = WorkdayHandler.getPercent(UserData.getWorkTimeStart()).ToString() + "%";
+            progressbarWorktime.Value = WorkdayHandler.getPercent(UserData.getWorkTimeStart());
+            progressbarWorktime.Foreground = new SolidColorBrush(Helper.getProgressColor(WorkdayHandler.getPercent(UserData.getWorkTimeStart())));
 
             if (!WorkdayHandler.getIsStarted())
             {

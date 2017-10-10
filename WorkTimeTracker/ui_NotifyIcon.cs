@@ -40,22 +40,22 @@ namespace WorkTimeTracker
             }
             else
             {
-                if (WorkdayHandler.getPercent() == 100)
+                if (WorkdayHandler.getPercent(UserData.getWorkTimeStart()) == 100)
                 {
                     if (bIcon)
                     {
-                        trayIcon.Icon = Helper.getTrayIcon(UserData.getTrayIconColor(), Helper.getProgressColor(WorkdayHandler.getPercent()));
+                        trayIcon.Icon = Helper.getTrayIcon(UserData.getTrayIconColor(), Helper.getProgressColor(WorkdayHandler.getPercent(UserData.getWorkTimeStart())));
                         bIcon = false;
                     }
                     else
                     {
-                        trayIcon.Icon = Helper.getTrayIcon(Helper.getProgressColor(WorkdayHandler.getPercent()), UserData.getTrayIconColor());
+                        trayIcon.Icon = Helper.getTrayIcon(Helper.getProgressColor(WorkdayHandler.getPercent(UserData.getWorkTimeStart())), UserData.getTrayIconColor());
                         bIcon = true;
                     }
                 }
                 else
                 {
-                    trayIcon.Icon = Helper.getTrayIcon(UserData.getTrayIconColor(), Helper.getProgressColor(WorkdayHandler.getPercent()));
+                    trayIcon.Icon = Helper.getTrayIcon(UserData.getTrayIconColor(), Helper.getProgressColor(WorkdayHandler.getPercent(UserData.getWorkTimeStart())));
                 }
             }
 

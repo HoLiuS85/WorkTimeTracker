@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace WorkTimeTracker
 {
-    public static class ConfigHandler
+    public static class Config
     {
         private static String confFile = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + Path.DirectorySeparatorChar + Assembly.GetEntryAssembly().GetName().Name + ".xml";
         public static List<ConfValue> lConfValues = new List<ConfValue>()
@@ -19,13 +19,10 @@ namespace WorkTimeTracker
             new ConfValue("intWorkDuration","456"),
             new ConfValue("intInterval","1000"),
             new ConfValue("dtWorkStartTime",DateTime.MinValue.ToString()),
-            new ConfValue("dtWorkEndTime",DateTime.MinValue.ToString()),
-            new ConfValue("tsWorkTimeRemaining","00:00:00"),
-            new ConfValue("tsWorkTimeElapsed","00:00:00"),
             new ConfValue("colorTrayIcon","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBQEAAAAWV29ya1RpbWVUcmFja2VyLkNvbG91cgQAAAABQQFSAUcBQgAAAAACAgICAgAAAP////8L")
         };
 
-        static ConfigHandler()
+        static Config()
         {
             if (File.Exists(confFile))
                 Read();
@@ -308,7 +305,6 @@ namespace WorkTimeTracker
     public class Threshold
     {
         #region Declaration
-        private String _name;
         private Colour _color;
         private Int32 _value;
         #endregion

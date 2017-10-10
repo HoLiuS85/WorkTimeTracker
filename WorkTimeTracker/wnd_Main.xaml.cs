@@ -99,9 +99,6 @@ namespace WorkTimeTracker
 
         private void OnExitClick(object sender, EventArgs e)
         {
-            //Stop the Workday caluclation properly
-            WorkdayHandler.WorkdayCalculationStop();
-
             //Exit the application
             Application.Current.Shutdown(0);
         }

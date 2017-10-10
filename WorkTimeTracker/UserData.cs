@@ -14,10 +14,7 @@ namespace WorkTimeTracker
         private static Colour _cTrayIcon;
         private static Int32 _iInterval;
         private static Int32 _iWorkDuration;
-        private static DateTime _dtWorkEndTime;
         private static DateTime _dtWorkStartTime;
-        private static TimeSpan _tsWorkTimeElapsed;
-        private static TimeSpan _tsWorkTimeRemaining;
         private static List<Day> _lDays;
         private static List<Break> _lBreaks;
         private static List<Subtitle> _lSubtitles;
@@ -35,8 +32,8 @@ namespace WorkTimeTracker
         public static void setTrayIconColor(Colour cTrayIcon)
         {
             _cTrayIcon = cTrayIcon;
-            ConfigHandler.lConfValues.Find(x => x.name == "colorTrayIcon").value = SerializeObject(cTrayIcon);
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "colorTrayIcon").value = SerializeObject(cTrayIcon);
+            Config.Save();
         }
         public static Colour getTrayIconColor()
         {
@@ -46,8 +43,8 @@ namespace WorkTimeTracker
         public static void setInterval(Int32 iInterval)
         {
             _iInterval = iInterval;
-            ConfigHandler.lConfValues.Find(x => x.name == "intInterval").value = iInterval.ToString();
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "intInterval").value = iInterval.ToString();
+            Config.Save();
         }
         public static Int32 getInterval()
         {
@@ -57,69 +54,30 @@ namespace WorkTimeTracker
         public static void setWorkDuration(Int32 iWorkDuration)
         {
             _iWorkDuration = iWorkDuration;
-            ConfigHandler.lConfValues.Find(x => x.name == "intWorkDuration").value = iWorkDuration.ToString();
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "intWorkDuration").value = iWorkDuration.ToString();
+            Config.Save();
         }
         public static Int32 getWorkDuration()
         {
             return _iWorkDuration;
         }
 
-        public static void setWorkTimeEnd(DateTime dtWorkEndTime)
-        {
-            _dtWorkEndTime = dtWorkEndTime;
-            ConfigHandler.lConfValues.Find(x => x.name == "dtWorkEndTime").value = dtWorkEndTime.ToString();
-            ConfigHandler.Save();
-        }
-        public static DateTime getWorkTimeEnd()
-        {
-            if (_dtWorkEndTime != null)
-                return _dtWorkEndTime;
-            else
-                return DateTime.MinValue;
-        }
-
         public static void setWorkTimeStart(DateTime dtWorkStartTime)
         {
             _dtWorkStartTime = dtWorkStartTime;
-            ConfigHandler.lConfValues.Find(x => x.name == "dtWorkStartTime").value = dtWorkStartTime.ToString();
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "dtWorkStartTime").value = dtWorkStartTime.ToString();
+            Config.Save();
         }
         public static DateTime getWorkTimeStart()
         {
-            if (_dtWorkEndTime != null)
-                return _dtWorkStartTime;
-            else
-                return DateTime.MinValue;
-        }
-
-        public static void setWorkTimeElapsed(TimeSpan tsWorkTimeElapsed)
-        {
-            _tsWorkTimeElapsed = tsWorkTimeElapsed;
-            ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeElapsed").value = tsWorkTimeElapsed.ToString();
-            ConfigHandler.Save();
-        }
-        public static TimeSpan getWorkTimeElapsed()
-        {
-            return _tsWorkTimeElapsed;
-        }
-
-        public static void setWorkTimeRemaining(TimeSpan tsWorkTimeRemaining)
-        {
-            _tsWorkTimeRemaining = tsWorkTimeRemaining;
-            ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeRemaining").value = tsWorkTimeRemaining.ToString();
-            ConfigHandler.Save();
-        }
-        public static TimeSpan getWorkTimeRemaining()
-        {
-            return _tsWorkTimeRemaining;
+            return _dtWorkStartTime;
         }
 
         public static void setDays(List<Day> lDays)
         {
             _lDays = lDays;
-            ConfigHandler.lConfValues.Find(x => x.name == "listDays").value = SerializeObject(lDays);
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "listDays").value = SerializeObject(lDays);
+            Config.Save();
         }
         public static List<Day> getDays()
         {
@@ -129,8 +87,8 @@ namespace WorkTimeTracker
         public static void setBreaks(List<Break> lBreaks)
         {
             _lBreaks = lBreaks;
-            ConfigHandler.lConfValues.Find(x => x.name == "listBreaks").value = SerializeObject(lBreaks);
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "listBreaks").value = SerializeObject(lBreaks);
+            Config.Save();
         }
         public static List<Break> getBreaks()
         {
@@ -140,8 +98,8 @@ namespace WorkTimeTracker
         public static void setSubtitles(List<Subtitle> lSubtitles)
         {
             _lSubtitles = lSubtitles;
-            ConfigHandler.lConfValues.Find(x => x.name == "listSubtitles").value = SerializeObject(lSubtitles);
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "listSubtitles").value = SerializeObject(lSubtitles);
+            Config.Save();
         }
         public static List<Subtitle> getSubtitles()
         {
@@ -151,8 +109,8 @@ namespace WorkTimeTracker
         public static void setThresholds(List<Threshold> lThresholds)
         {
             _lThresholds = lThresholds;
-            ConfigHandler.lConfValues.Find(x => x.name == "listThresholds").value = SerializeObject(lThresholds);
-            ConfigHandler.Save();
+            Config.lConfValues.Find(x => x.name == "listThresholds").value = SerializeObject(lThresholds);
+            Config.Save();
         }
         public static List<Threshold> getThresholds()
         {
@@ -185,17 +143,14 @@ namespace WorkTimeTracker
 
         public static void ReadConfig()
         {
-            _cTrayIcon = (Colour)DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "colorTrayIcon").value);
-            _iInterval = Convert.ToInt32(ConfigHandler.lConfValues.Find(x => x.name == "intInterval").value);
-            _iWorkDuration = Convert.ToInt32(ConfigHandler.lConfValues.Find(x => x.name == "intWorkDuration").value);
-            _dtWorkEndTime = DateTime.Parse(ConfigHandler.lConfValues.Find(x => x.name == "dtWorkEndTime").value);
-            _dtWorkStartTime = DateTime.Parse(ConfigHandler.lConfValues.Find(x => x.name == "dtWorkStartTime").value);
-            _tsWorkTimeElapsed = TimeSpan.Parse(ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeElapsed").value);
-            _tsWorkTimeRemaining = TimeSpan.Parse(ConfigHandler.lConfValues.Find(x => x.name == "tsWorkTimeRemaining").value);
-            _lDays = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listDays").value) as List<Day>;
-            _lBreaks = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listBreaks").value) as List<Break>;
-            _lSubtitles = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listSubtitles").value) as List<Subtitle>;
-            _lThresholds = DeserializeObject(ConfigHandler.lConfValues.Find(x => x.name == "listThresholds").value) as List<Threshold>;
+            _cTrayIcon = (Colour)DeserializeObject(Config.lConfValues.Find(x => x.name == "colorTrayIcon").value);
+            _iInterval = Convert.ToInt32(Config.lConfValues.Find(x => x.name == "intInterval").value);
+            _iWorkDuration = Convert.ToInt32(Config.lConfValues.Find(x => x.name == "intWorkDuration").value);
+            _dtWorkStartTime = DateTime.Parse(Config.lConfValues.Find(x => x.name == "dtWorkStartTime").value);
+            _lDays = DeserializeObject(Config.lConfValues.Find(x => x.name == "listDays").value) as List<Day>;
+            _lBreaks = DeserializeObject(Config.lConfValues.Find(x => x.name == "listBreaks").value) as List<Break>;
+            _lSubtitles = DeserializeObject(Config.lConfValues.Find(x => x.name == "listSubtitles").value) as List<Subtitle>;
+            _lThresholds = DeserializeObject(Config.lConfValues.Find(x => x.name == "listThresholds").value) as List<Threshold>;
         }
     
         public static void ConfigToXML(string filename)
