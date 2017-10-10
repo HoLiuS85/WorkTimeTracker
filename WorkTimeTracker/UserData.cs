@@ -12,7 +12,6 @@ namespace WorkTimeTracker
     {
         private static OpenForm _ofWindow;
         private static Colour _cTrayIcon;
-        private static Int32 _iInterval;
         private static Int32 _iWorkDuration;
         private static DateTime _dtWorkStartTime;
         private static List<Day> _lDays;
@@ -39,18 +38,7 @@ namespace WorkTimeTracker
         {
             return _cTrayIcon;
         }
-
-        public static void setInterval(Int32 iInterval)
-        {
-            _iInterval = iInterval;
-            Config.lConfValues.Find(x => x.name == "intInterval").value = iInterval.ToString();
-            Config.Save();
-        }
-        public static Int32 getInterval()
-        {
-            return _iInterval;
-        }
-
+        
         public static void setWorkDuration(Int32 iWorkDuration)
         {
             _iWorkDuration = iWorkDuration;
@@ -144,7 +132,6 @@ namespace WorkTimeTracker
         public static void ReadConfig()
         {
             _cTrayIcon = (Colour)DeserializeObject(Config.lConfValues.Find(x => x.name == "colorTrayIcon").value);
-            _iInterval = Convert.ToInt32(Config.lConfValues.Find(x => x.name == "intInterval").value);
             _iWorkDuration = Convert.ToInt32(Config.lConfValues.Find(x => x.name == "intWorkDuration").value);
             _dtWorkStartTime = DateTime.Parse(Config.lConfValues.Find(x => x.name == "dtWorkStartTime").value);
             _lDays = DeserializeObject(Config.lConfValues.Find(x => x.name == "listDays").value) as List<Day>;
@@ -190,7 +177,6 @@ namespace WorkTimeTracker
             }
             thresholdsNode.RemoveAll();
             
-            worktimetrackerNode.SetAttribute("interval", getInterval().ToString());
             worktimetrackerNode.SetAttribute("workduration", getWorkDuration().ToString());
             worktimetrackerNode.SetAttribute("headcolor", getTrayIconColor().ToString());
 
@@ -236,8 +222,7 @@ namespace WorkTimeTracker
 
             try { ColorConverter.ConvertFromString(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["headcolor"].Value); }
             catch { bIsNewFormat = false; }
-
-            setInterval(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["interval"].Value));
+            
             setWorkDuration(Convert.ToInt32(xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker").Attributes["workduration"].Value));
 
             if (bIsNewFormat)
