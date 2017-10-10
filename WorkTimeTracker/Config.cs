@@ -316,15 +316,13 @@ namespace WorkTimeTracker
         #region Getter/Setter
         public Color color { get { return Color.FromArgb(_color.A, _color.R, _color.G, _color.B); } set { _color = value; } }
         public Colour colour { get { return _color; } set { _color = value; } }
-        public String name { get { return _name; } set { _name = value; } }
         public Int32 value { get { return _value; } set { _value = value; } }
 #endregion
 
-        public Threshold(Color color, Int32 value, String name)
+        public Threshold(Color color, Int32 value)
         {
             _color = color;
             _value = value;
-            _name = name;
         }
     }
 

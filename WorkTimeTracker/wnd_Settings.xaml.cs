@@ -67,7 +67,7 @@ namespace WorkTimeTracker
                 lSubtitle.Add(new Subtitle(0,0,String.Empty));
 
             if (b.Tag.ToString() == "threshold")
-                lThreshold.Add(new Threshold(Colors.Transparent, 0, String.Empty));
+                lThreshold.Add(new Threshold(Colors.Transparent, 0 ));
         }
 
         private void buttonCancel_OnClick(object sender, RoutedEventArgs e)

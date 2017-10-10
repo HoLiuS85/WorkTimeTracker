@@ -261,7 +261,6 @@ namespace WorkTimeTracker
             foreach (Threshold lThreshold in getThresholds())
             {
                 XmlElement thresholdNode = xmlDocument.CreateElement("threshold");
-                thresholdNode.SetAttribute("name", lThreshold.name);
                 thresholdNode.SetAttribute("value", lThreshold.value.ToString());
                 thresholdNode.SetAttribute("color", lThreshold.colour.ToString());
                 thresholdsNode.AppendChild(thresholdNode);
@@ -314,7 +313,6 @@ namespace WorkTimeTracker
 
             foreach (XmlNode thresholdNode in xmlDocument.DocumentElement.SelectSingleNode("/worktimetracker/thresholds"))
             {
-                String name = thresholdNode.Attributes["name"].Value;
                 Int32 value = Convert.ToInt32(thresholdNode.Attributes["value"].Value);
                 Color color;
                 if (bIsNewFormat)
@@ -322,7 +320,7 @@ namespace WorkTimeTracker
                 else
                     color = Helper.ColorFromArgb(Convert.ToInt32(thresholdNode.Attributes["color"].Value));
 
-                lThresholdTemp.Add(new Threshold(color, value, name));
+                lThresholdTemp.Add(new Threshold(color, value));
             }
             setThresholds(lThresholdTemp);
 
