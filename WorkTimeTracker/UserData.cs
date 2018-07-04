@@ -14,6 +14,7 @@ namespace WorkTimeTracker
         private static Colour _cTrayIcon;
         private static Int32 _iWorkDuration;
         private static DateTime _dtWorkStartTime;
+        private static DateTime _dtLastLockTime;
         private static List<Day> _lDays;
         private static List<Break> _lBreaks;
         private static List<Subtitle> _lSubtitles;
@@ -59,6 +60,17 @@ namespace WorkTimeTracker
         public static DateTime getWorkTimeStart()
         {
             return _dtWorkStartTime;
+        }
+
+        public static void setLastLockTime(DateTime dtLastLockTime)
+        {
+            _dtLastLockTime = dtLastLockTime;
+            Config.lConfValues.Find(x => x.name == "dtLastLockTime").value = dtLastLockTime.ToString();
+            Config.Save();
+        }
+        public static DateTime getLastLockTime()
+        {
+            return _dtLastLockTime;
         }
 
         public static void setDays(List<Day> lDays)
@@ -134,6 +146,7 @@ namespace WorkTimeTracker
             _cTrayIcon = (Colour)DeserializeObject(Config.lConfValues.Find(x => x.name == "colorTrayIcon").value);
             _iWorkDuration = Convert.ToInt32(Config.lConfValues.Find(x => x.name == "intWorkDuration").value);
             _dtWorkStartTime = DateTime.Parse(Config.lConfValues.Find(x => x.name == "dtWorkStartTime").value);
+            _dtLastLockTime = DateTime.Parse(Config.lConfValues.Find(x => x.name == "dtLastLockTime").value);
             _lDays = DeserializeObject(Config.lConfValues.Find(x => x.name == "listDays").value) as List<Day>;
             _lBreaks = DeserializeObject(Config.lConfValues.Find(x => x.name == "listBreaks").value) as List<Break>;
             _lSubtitles = DeserializeObject(Config.lConfValues.Find(x => x.name == "listSubtitles").value) as List<Subtitle>;

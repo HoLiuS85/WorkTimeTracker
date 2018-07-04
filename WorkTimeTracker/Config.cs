@@ -18,6 +18,7 @@ namespace WorkTimeTracker
             new ConfValue("listDays","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBAEAAACAAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbV29ya1RpbWVUcmFja2VyLkRheSwgV29ya1RpbWVUcmFja2VyLCBWZXJzaW9uPTEuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dAwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24EAAAVV29ya1RpbWVUcmFja2VyLkRheVtdAgAAAAgICQMAAAAAAAAAAAAAAAcDAAAAAAEAAAAAAAAABBNXb3JrVGltZVRyYWNrZXIuRGF5AgAAAAs="),
             new ConfValue("intWorkDuration","456"),
             new ConfValue("intInterval","1000"),
+            new ConfValue("dtLastLockTime",DateTime.MinValue.ToString()),
             new ConfValue("dtWorkStartTime",DateTime.MinValue.ToString()),
             new ConfValue("colorTrayIcon","AAEAAAD/////AQAAAAAAAAAMAgAAAEZXb3JrVGltZVRyYWNrZXIsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBQEAAAAWV29ya1RpbWVUcmFja2VyLkNvbG91cgQAAAABQQFSAUcBQgAAAAACAgICAgAAAP////8L")
         };

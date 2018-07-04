@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace WorkTimeTracker
@@ -12,9 +12,29 @@ namespace WorkTimeTracker
     /// </summary>
     public partial class wnd_Notification : Window
     {
+        Timer updateTimer;
+
         public wnd_Notification()
         {
             InitializeComponent();
+
+            updateTimer = new Timer(10000);
+            updateTimer.Elapsed += Timer_Elapsed;
+            updateTimer.Start();
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(new Action(() => {
+                labelRemainingTime.Text = WorkdayHandler.getWorkTimeRemaining(UserData.getWorkTimeStart()).ToString("hh\\:mm");
+                labelRemainingText.Text = WorkdayHandler.getWorkTimeRemaining(UserData.getWorkTimeStart()) < TimeSpan.Zero ? "Overtime:" : "Remaining Time";
+                labelElapsedTime.Text = WorkdayHandler.getWorkTimeElapsed(UserData.getWorkTimeStart()).ToString("hh\\:mm");
+                labelEndTime.Text = WorkdayHandler.getWorkTimeEnd(UserData.getWorkTimeStart()).ToShortTimeString();
+                labelStartTime.Text = UserData.getWorkTimeStart().ToShortTimeString();
+                labelPercentage.Text = WorkdayHandler.getPercent(UserData.getWorkTimeStart()).ToString() + "%";
+                progressbarWorktime.Value = WorkdayHandler.getPercent(UserData.getWorkTimeStart());
+                progressbarWorktime.Foreground = new SolidColorBrush(Helper.getProgressColor(WorkdayHandler.getPercent(UserData.getWorkTimeStart())));
+            }));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

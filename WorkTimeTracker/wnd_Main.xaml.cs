@@ -30,6 +30,8 @@ namespace WorkTimeTracker
                 Icon.trayIcon.ContextMenu.MenuItems["settings"].Click += OnSettingsClick;
                 Icon.trayIcon.ContextMenu.MenuItems["history"].Click += OnHistoryClick;
                 Icon.trayIcon.ContextMenu.MenuItems["exit"].Click += OnExitClick;
+
+                SessionHandler _session = new SessionHandler();
             }
             catch (Exception e) { MessageBox.Show(e.Source + "-----" + e.Message + "-------"+e.StackTrace+"-----------" + e.Data);
                 Application.Current.Shutdown(1);
