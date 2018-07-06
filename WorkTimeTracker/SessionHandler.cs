@@ -13,22 +13,24 @@ namespace WorkTimeTracker
 {
     class SessionHandler
     {
-        private WindowInteropHelper _helper;
+        public delegate void EventDelegate();
+        public event EventDelegate MyWorkdayEvent;
 
-        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public extern static bool ShutdownBlockReasonCreate([In]IntPtr hWnd, [In] string pwszReason);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public extern static bool ShutdownBlockReasonDestroy([In]IntPtr hWnd);
+        private void OnWorkdayEvent()
+        {
+            MyWorkdayEvent?.Invoke();
+        }
 
         public SessionHandler()
         {
-            //Call Unlock on Applciation Start
-            LogonUnlock();
+            //Call Unlock on Applciation Start to check if a workday is running
+            VerifySessionState();
 
             //Register Events for session End (Logoff/Shutdown)
             SystemEvents.SessionEnding += (e1, e2) =>
             {
+                //Call Session Change manually to store current time as last lock time
                 SessionSwitch(null, new SessionSwitchEventArgs(SessionSwitchReason.SessionLogoff));
             };
 
@@ -48,52 +50,18 @@ namespace WorkTimeTracker
             else if (e.Reason == SessionSwitchReason.SessionLogon || e.Reason == SessionSwitchReason.SessionUnlock)
             {
                 ////startup or logon or unlock
-                LogonUnlock();
+                VerifySessionState();
             }
         }
 
-        private void LogonUnlock()
+        public void VerifySessionState()
         {
             //If LastLockTime is not today
             if (!UserData.getLastLockTime().Date.Equals(DateTime.Now.Date))
             {
-                DateTime dtTempNow = DateTime.Now;
-
-                //If the Workday is started, offer to end it
-                if (WorkdayHandler.getIsStarted())
-                {
-                    if (WorkdayEnd(UserData.getLastLockTime()))
-                        WorkdayStart(UserData.getWorkDuration(), dtTempNow);
-                }
-                else
-                {
-                    WorkdayStart(UserData.getWorkDuration(), dtTempNow);
-                }
+                //Raise the event
+                OnWorkdayEvent();
             }
         }
-
-        private bool WorkdayEnd(DateTime LastLockTime)
-        {
-            string strCaption = "First daily login detected";
-            string strText = "Your last workday on '" + LastLockTime.ToShortDateString() + "' is still active. Do you want to end it using last logoff time: " + LastLockTime.ToShortTimeString();
-
-            if (MessageBoxResult.Yes == MessageBox.Show(strText, strCaption, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.No))
-            {
-                WorkdayHandler.WorkdayEnd(LastLockTime);
-                return true;
-            }
-            return false;
-        }
-
-        private void WorkdayStart(int WorkDuration, DateTime WorkStartTime)
-        {
-            string strCaption = "First daily login detected";
-            string strText = "Do you want to start a new workday now: " + WorkStartTime.ToShortTimeString() + "?";
-
-            if (MessageBoxResult.Yes == MessageBox.Show(strText, strCaption, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.No))
-                WorkdayHandler.WorkdayStart(WorkDuration, WorkStartTime);
-        }
-
-
     }
 }

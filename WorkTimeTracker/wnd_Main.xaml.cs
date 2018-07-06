@@ -31,13 +31,15 @@ namespace WorkTimeTracker
                 Icon.trayIcon.ContextMenu.MenuItems["history"].Click += OnHistoryClick;
                 Icon.trayIcon.ContextMenu.MenuItems["exit"].Click += OnExitClick;
 
-                SessionHandler _session = new SessionHandler();
+                SessionHandler UserSession = new SessionHandler();
+                UserSession.MyWorkdayEvent += new SessionHandler.EventDelegate(OnSessionStateChange);
+                UserSession.VerifySessionState();
             }
             catch (Exception e) { MessageBox.Show(e.Source + "-----" + e.Message + "-------"+e.StackTrace+"-----------" + e.Data);
                 Application.Current.Shutdown(1);
             }
         }
-
+        
         private void WindowOpener(Window window)
         {
             //Reset the Openform Flag
@@ -56,6 +58,11 @@ namespace WorkTimeTracker
 
             if (UserData.getOpenWindow() == OpenForm.End)
                 WindowOpener(new wnd_WorkdayEnd());
+        }
+
+        private void OnSessionStateChange()
+        {
+            WindowOpener(new wnd_WorkdayAutomation());
         }
 
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
